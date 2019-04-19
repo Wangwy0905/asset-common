@@ -12,13 +12,13 @@ cache:
 build:
   stage: build
   script:
-    - echo $CI_PROJECT_PATH
     - mvn $MAVEN_CLI_OPTS compile
 test:
   stage: test
   script:
     - mvn $MAVEN_CLI_OPTS test
-    - cat target/site/jacoco/index.html | grep -o '<tfoot>.*</tfoot>'
+    - echo $CI_PROJECT_PATH
+    - cat $CI_PROJECT_PATH/target/site/jacoco/index.html | grep -o '<tfoot>.*</tfoot>'
 
 deploy:
   stage: deploy
