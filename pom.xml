@@ -97,6 +97,20 @@
 
     <build>
         <plugins>
+            <!-- 增加上传源码的功能，方便代码调试 -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <!-- 生成测试报告，检测代码质量 -->
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
@@ -120,6 +134,7 @@
         </plugins>
     </build>
 
+    <!-- 和Gitlab关联，在push代码的时候自动发布至maven库上 -->
     <distributionManagement>
         <repository>
             <id>weshare.asset.release.repo</id>
