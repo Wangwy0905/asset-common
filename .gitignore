@@ -1,0 +1,10 @@
+# Compiled class file
+*.class
+.idea
+*.iml
+out
+bin/
+out/
+logs
+**/.DS_Store
+target/
