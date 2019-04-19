@@ -14,7 +14,6 @@ build:
   script:
     - mvn $MAVEN_CLI_OPTS verify
     - mvn $MAVEN_CLI_OPTS compile
-    - cat target/site/jacoco/index.html | grep -o 'Total[^%]*%' | sed -e 's/Total/Jacoco-Test-Coverage:/g'
 test:
   stage: test
   script:
