@@ -18,6 +18,7 @@ test:
   script:
     - mvn $MAVEN_CLI_OPTS test
     - echo $CI_PROJECT_PATH
+    - ls target
     - ls $CI_PROJECT_PATH
     - cat $CI_PROJECT_PATH/target/site/jacoco/index.html | grep -o '<tfoot>.*</tfoot>'
 
