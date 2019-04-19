@@ -118,6 +118,11 @@
                         </goals>
                     </execution>
                 </executions>
+                <configuration>
+                    <argLine>surefireArgLine</argLine>
+                    <destFile>${project.build.directory}/coverage-reports/jacoco-ut.exec</destFile>
+                    <propertyName>surefireArgLine</propertyName>
+                </configuration>
             </plugin>
         </plugins>
     </build>
