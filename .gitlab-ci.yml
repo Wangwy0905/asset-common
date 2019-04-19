@@ -17,7 +17,7 @@ test:
   stage: test
   script:
     - mvn $MAVEN_CLI_OPTS test
-    - cat your/path/to/jacoco/report/index.html | grep -o '<tfoot>.*</tfoot>'
+    - cat target/site/jacoco/index.html | grep -o '<tfoot>.*</tfoot>'
 
 deploy:
   stage: deploy
