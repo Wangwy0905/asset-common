@@ -102,28 +102,17 @@
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.7.9</version>
-                <configuration>
-                    <excludes>
-                        <exclude>**/MavenApplicationKt.*</exclude>
-                    </excludes>
-                </configuration>
+                <version>0.7.5.201505241946</version>
                 <executions>
                     <execution>
-                        <id>agent-for-ut</id>
+                        <id>pre-unit-test</id>
                         <goals>
                             <goal>prepare-agent</goal>
                         </goals>
                     </execution>
                     <execution>
-                        <id>agent-for-it</id>
-                        <goals>
-                            <goal>prepare-agent-integration</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>jacoco-site</id>
-                        <phase>post-integration-test</phase>
+                        <id>post-unit-test</id>
+                        <phase>test</phase>
                         <goals>
                             <goal>report</goal>
                         </goals>
