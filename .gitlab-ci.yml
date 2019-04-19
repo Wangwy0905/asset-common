@@ -28,6 +28,5 @@ deploy:
   stage: deploy
   script:
     - mvn $MAVEN_CLI_OPTS deploy
-    - mv target/*.jar .
   only:
     - master
