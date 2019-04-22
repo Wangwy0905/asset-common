@@ -54,6 +54,6 @@ public class Response<T> {
         return new Response(INNER_ERROR, String.format(message, args));
     }
     public static Response fail(int status,String message, Object... args) {
-        return new Response(INNER_ERROR, String.format(message, args));
+        return new Response(status, String.format(message, args));
     }
 }
