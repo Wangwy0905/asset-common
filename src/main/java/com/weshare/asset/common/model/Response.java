@@ -10,6 +10,7 @@ import java.util.List;
 public class Response<T> {
     public static final int SUCCESS = 200;
     public static final int INNER_ERROR = 501;
+    public static final int FORBIDDEN = 403;
 
     private int status;
     private T payload;
