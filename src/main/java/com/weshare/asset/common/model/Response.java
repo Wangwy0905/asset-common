@@ -1,6 +1,8 @@
 package com.weshare.asset.common.model;
 
 import com.weshare.asset.common.util.ConversionUtils;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.util.ArrayList;
@@ -8,15 +10,27 @@ import java.util.List;
 
 @Data
 public class Response<T> {
+    //成功
     public static final int SUCCESS = 200;
-    public static final int INNER_ERROR = 501;
-    public static final int FORBIDDEN = 403;
+    //非业务类异常
+    public static final int SYSTEM_ERROR = 500;
+    //业务类异常
+    public static final int BUSINESS_ERROR = 400;
+    //非业务类异常 message描述
+    public static final String SYSTEM_ERROR_MESSAGE = "服务器端错误，请稍后再试!";
 
     private int status;
     private T payload;
+    private String message;
 
     public Response(int status, T payload) {
         this.status = status;
+        this.payload = payload;
+    }
+
+    public Response(int status, String message, T payload) {
+        this.status = status;
+        this.message = message;
         this.payload = payload;
     }
 
@@ -35,25 +49,43 @@ public class Response<T> {
     }
 
     public static <T> Response<T> success(T payload) {
-        return new Response<>(SUCCESS, payload);
+        return success(null, payload, null);
     }
 
     public static Response success(String message) {
-        return new Response(SUCCESS, message);
+        return success(message, null, null);
     }
 
     public static Response success(String message, Object... args) {
-        return success(String.format(message, args));
+        return success(message, null, args);
     }
 
-    public static Response fail(String message) {
-        return new Response(INNER_ERROR, message);
+    public static <T> Response<T> success(String message, T payload, Object... args) {
+        if (message == null) return new Response(SUCCESS, payload);
+
+        return new Response(SUCCESS, String.format(message, args), payload);
     }
 
-    public static Response fail(String message, Object... args) {
-        return new Response(INNER_ERROR, String.format(message, args));
+    public static Response systemFail() {
+        return systemFail(SYSTEM_ERROR_MESSAGE, null);
     }
-    public static Response fail(int status,String message, Object... args) {
-        return new Response(status, String.format(message, args));
+
+    public static Response systemFail(String message) {
+        return systemFail(message, null);
     }
+
+    public static Response systemFail(String message, Object... args) {
+        if (message == null) return new Response(SYSTEM_ERROR, null, null);
+        return new Response(SYSTEM_ERROR, String.format(message, args), null);
+    }
+
+    public static Response businessFail(String message) {
+        return businessFail(message, null);
+    }
+
+    public static Response businessFail(String message, Object... args) {
+        if (message == null) return new Response(BUSINESS_ERROR, null, null);
+        return new Response(BUSINESS_ERROR, String.format(message, args), null);
+    }
+
 }
