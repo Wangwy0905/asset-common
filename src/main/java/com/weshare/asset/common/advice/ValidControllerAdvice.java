@@ -9,6 +9,6 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class ValidControllerAdvice {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public Response bindExceptionHandler(MethodArgumentNotValidException ex) {
-        return new Response(Response.INNER_ERROR, ex.getBindingResult().getFieldError().getField() + ex.getBindingResult().getFieldError().getDefaultMessage());
+        return new Response(Response.BUSINESS_ERROR, ex.getBindingResult().getFieldError().getField() + ex.getBindingResult().getFieldError().getDefaultMessage());
     }
 }
