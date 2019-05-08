@@ -79,6 +79,15 @@ public class Response<T> {
         return new Response(SYSTEM_ERROR, String.format(message, args), null);
     }
 
+    public static <T> Response<T> systemFail(String message, T payload) {
+        return systemFail(message, payload,null);
+    }
+
+    public static <T> Response<T> systemFail(String message, T payload, Object... args) {
+        if (message == null) return new Response(SYSTEM_ERROR, payload);
+        return new Response(SYSTEM_ERROR, String.format(message, args), payload);
+    }
+
     public static Response businessFail(String message) {
         return businessFail(message, null);
     }
@@ -86,6 +95,16 @@ public class Response<T> {
     public static Response businessFail(String message, Object... args) {
         if (message == null) return new Response(BUSINESS_ERROR, null, null);
         return new Response(BUSINESS_ERROR, String.format(message, args), null);
+    }
+
+    public static <T> Response<T> businessFail(String message, T payload) {
+        return businessFail(message, payload,null);
+    }
+
+
+    public static <T> Response<T> businessFail(String message, T payload, Object... args) {
+        if (message == null) return new Response(BUSINESS_ERROR, payload);
+        return new Response(BUSINESS_ERROR, String.format(message, args), payload);
     }
 
 }
