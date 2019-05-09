@@ -16,6 +16,8 @@ public class Response<T> {
     public static final int SYSTEM_ERROR = 500;
     //业务类异常
     public static final int BUSINESS_ERROR = 400;
+    //成功 message描述
+    public static final String SUCCESS_MESSAGE = "成功";
     //非业务类异常 message描述
     public static final String SYSTEM_ERROR_MESSAGE = "服务器端错误，请稍后再试!";
 
@@ -60,8 +62,12 @@ public class Response<T> {
         return success(message, null, args);
     }
 
+    public static <T> Response<T> success(String message, T payload) {
+        return success(message, payload, null);
+    }
+
     public static <T> Response<T> success(String message, T payload, Object... args) {
-        if (message == null) return new Response(SUCCESS, payload);
+        if (message == null) return new Response(SUCCESS, SUCCESS_MESSAGE, payload);
 
         return new Response(SUCCESS, String.format(message, args), payload);
     }
@@ -80,7 +86,7 @@ public class Response<T> {
     }
 
     public static <T> Response<T> systemFail(String message, T payload) {
-        return systemFail(message, payload,null);
+        return systemFail(message, payload, null);
     }
 
     public static <T> Response<T> systemFail(String message, T payload, Object... args) {
@@ -98,7 +104,7 @@ public class Response<T> {
     }
 
     public static <T> Response<T> businessFail(String message, T payload) {
-        return businessFail(message, payload,null);
+        return businessFail(message, payload, null);
     }
 
 
