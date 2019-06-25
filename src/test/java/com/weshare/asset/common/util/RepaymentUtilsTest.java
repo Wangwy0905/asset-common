@@ -5,11 +5,11 @@ import com.weshare.asset.common.calculator.enums.RepayTypeEnum;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class RateUtilsTest {
+public class RepaymentUtilsTest {
 
     @Test
-    public void calculate() throws Exception {
-        Repayment repayment = RateUtils.calculate(10000.0, 12, 0.013, RepayTypeEnum.DBDX);
+    public void generate() throws Exception {
+        Repayment repayment = RepaymentUtils.generate(10000.0, 12, 0.013, RepayTypeEnum.DBDX);
         System.out.println(repayment);
         Assert.assertEquals(repayment.getRepaymentDetails().size(), 12);
     }
