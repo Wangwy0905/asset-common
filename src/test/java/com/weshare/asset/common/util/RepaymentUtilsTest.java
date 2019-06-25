@@ -9,7 +9,7 @@ public class RepaymentUtilsTest {
 
     @Test
     public void generate() throws Exception {
-        Repayment repayment = RepaymentUtils.generate(10000.0, 12, 0.013, RepayTypeEnum.DBDX);
+        Repayment repayment = RepaymentUtils.generate(10000.0, 12, 0.0233, RepayTypeEnum.DBDX);
         System.out.println(repayment);
         Assert.assertEquals(repayment.getRepaymentDetails().size(), 12);
     }

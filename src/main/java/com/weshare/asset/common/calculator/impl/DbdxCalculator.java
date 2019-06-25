@@ -47,7 +47,7 @@ public class DbdxCalculator implements RateCalculator {
         }
 
         repaymentDetail.setInterest(repayment.getLoanAmount().multiply(repayment.getMonthlyInterestRate()));
-        repaymentDetail.setRepayPrincipal(repayment.getLoanAmount().divide(BigDecimal.valueOf(repayment.getLoanTerm()), 0, RoundingMode.HALF_UP));
+        repaymentDetail.setRepayPrincipal(repayment.getLoanAmount().divide(BigDecimal.valueOf(repayment.getLoanTerm()), 2, RoundingMode.HALF_UP));
         repaymentDetail.setRemainPrincipal(remainPrincipal.subtract(repaymentDetail.getRepayPrincipal()));
         repaymentDetail.setRepayTotal(repaymentDetail.getInterest().add(repaymentDetail.getRepayPrincipal()));
         repayment.addRepaymentDetail(repaymentDetail);
