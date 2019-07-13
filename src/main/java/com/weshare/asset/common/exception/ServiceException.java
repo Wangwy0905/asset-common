@@ -1,8 +1,17 @@
 package com.weshare.asset.common.exception;
 
-public class ServiceException extends Exception {
+
+public class ServiceException extends AssetException {
+    public ServiceException() {
+        super();
+    }
+
     public ServiceException(String message) {
         super(message);
+    }
+
+    public ServiceException(Integer code, String message) {
+        super(code, message);
     }
 
     public ServiceException(String message, Object... args) {
