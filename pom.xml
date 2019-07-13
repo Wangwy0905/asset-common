@@ -6,7 +6,7 @@
 
     <groupId>com.weshare</groupId>
     <artifactId>asset-common</artifactId>
-    <version>1.0.5-SNAPSHOT</version>
+    <version>1.0.6-SNAPSHOT</version>
 
     <dependencies>
         <dependency>

@@ -1,12 +1,17 @@
 package com.weshare.asset.common.exception;
 
-/**
- * 业务异常
- * @author zhibin.wang
- */
+
 public class ServiceException extends AssetException {
+    public ServiceException() {
+        super();
+    }
+
     public ServiceException(String message) {
         super(message);
+    }
+
+    public ServiceException(Integer code, String message) {
+        super(code, message);
     }
 
     public ServiceException(String message, Object... args) {
