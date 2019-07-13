@@ -1,14 +1,14 @@
 package com.weshare.asset.common.model;
 
 import com.weshare.asset.common.util.ConversionUtils;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Data
+@NoArgsConstructor
 public class Response<T> {
     //成功
     public static final int SUCCESS = 200;
