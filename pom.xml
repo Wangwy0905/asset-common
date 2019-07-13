@@ -7,6 +7,7 @@
     <groupId>com.weshare</groupId>
     <artifactId>asset-common</artifactId>
     <version>1.0.6-SNAPSHOT</version>
+    <packaging>jar</packaging>
 
     <dependencies>
         <dependency>
