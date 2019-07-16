@@ -6,6 +6,10 @@ public class ServiceException extends AssetException {
         super();
     }
 
+    public ServiceException(Throwable ex) {
+        super(ex);
+    }
+
     public ServiceException(String message) {
         super(message);
     }
@@ -16,6 +20,10 @@ public class ServiceException extends AssetException {
 
     public ServiceException(String message, Object... args) {
         super(String.format(message, args));
+    }
+
+    public ServiceException(Integer code, String message, Throwable ex) {
+        super(code, message, ex);
     }
 
     public static ServiceException illegalOperation() {

@@ -13,6 +13,10 @@ public class AssetException extends Exception {
         super();
     }
 
+    public AssetException(Throwable ex) {
+        super(ex);
+    }
+
     public AssetException(String message) {
         super(message);
     }
@@ -24,7 +28,12 @@ public class AssetException extends Exception {
         this.code = code;
     }
 
-    public AssetException(Throwable ex) {
-        super(ex);
+    public AssetException(Integer code, String message, Throwable ex) {
+        super(message, ex);
+        this.code = code;
+    }
+
+    public Integer getCode() {
+        return this.code;
     }
 }

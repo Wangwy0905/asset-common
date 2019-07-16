@@ -4,10 +4,7 @@ import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.MappedSuperclass;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
@@ -18,7 +15,9 @@ public class EntityBase {
     @GeneratedValue(strategy = GenerationType.AUTO)
     protected Long id;
 
+    @Column(columnDefinition = "varchar(255) default 'system' COMMENT '创建人'")
     protected String creator;
+    @Column(columnDefinition = "varchar(255) default 'system' COMMENT '修改人'")
     protected String modifier;
 
     @CreationTimestamp
