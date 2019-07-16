@@ -27,4 +27,8 @@ public class AssetException extends Exception {
     public AssetException(Throwable ex) {
         super(ex);
     }
+
+    public Integer getCode() {
+        return this.code;
+    }
 }
