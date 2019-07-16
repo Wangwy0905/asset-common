@@ -1,5 +1,7 @@
 package com.weshare.asset.common.convert;
 
+import com.weshare.asset.common.annotation.Jackson;
+import com.weshare.asset.common.util.JacksonConversionUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.core.convert.TypeDescriptor;
@@ -24,6 +26,9 @@ public class GenericConverter implements ConditionalGenericConverter {
 
     @Override
     public Object convert(Object source, TypeDescriptor sourceType, TypeDescriptor targetType) {
-       return mapper.map(source, targetType.getType());
+        if (targetType.getType().isAnnotationPresent(Jackson.class)) {
+            return JacksonConversionUtils.convert(source, targetType.getType());
+        }
+        return mapper.map(source, targetType.getType());
     }
 }
