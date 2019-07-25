@@ -14,10 +14,10 @@ public class EntityBase {
     @GeneratedValue(strategy = GenerationType.AUTO)
     protected Long id;
 
-    @Column(columnDefinition = "varchar(255) default 'system' COMMENT '创建人'")
-    protected String creator;
-    @Column(columnDefinition = "varchar(255) default 'system' COMMENT '修改人'")
-    protected String modifier;
+    @Column(name="CREATOR", length=128, nullable=false, unique=false)
+    protected String creator = "system";
+    @Column(name="MODIFIER", length=128, nullable=false, unique=false)
+    protected String modifier = "system";
 
     @CreationTimestamp
     protected LocalDateTime createDateTime;
