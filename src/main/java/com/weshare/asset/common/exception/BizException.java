@@ -2,6 +2,8 @@ package com.weshare.asset.common.exception;
 
 import com.weshare.asset.common.trait.StatusDescriptor;
 
+import java.text.MessageFormat;
+
 /**
  * @author zhibin.wang
  */
@@ -16,10 +18,10 @@ public class BizException extends AssetException {
     public BizException(Integer code, String message, Throwable ex) {
         super(code, message, ex);
     }
-    public BizException(StatusDescriptor descriptor) {
-        super(descriptor.getStatus(), descriptor.getMessage());
+    public BizException(StatusDescriptor descriptor, Object... args) {
+        super(descriptor.getStatus(), MessageFormat.format(descriptor.getMsgTemplate(), args));
     }
-    public BizException(StatusDescriptor descriptor, Throwable ex) {
-        super(descriptor.getStatus(), descriptor.getMessage(), ex);
+    public BizException(StatusDescriptor descriptor, Throwable ex, Object... args) {
+        super(descriptor.getStatus(), MessageFormat.format(descriptor.getMsgTemplate(), args), ex);
     }
 }

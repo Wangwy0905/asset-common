@@ -2,11 +2,20 @@ package com.weshare.asset.common.advice;
 
 import com.weshare.asset.common.exception.AssetException;
 import com.weshare.asset.common.model.Response;
+import com.weshare.asset.common.util.POJOUtils;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 优化异常处理机制
@@ -15,11 +24,28 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 @Slf4j
 public class AssetExceptionHandler {
+    @ExceptionHandler({IllegalArgumentException.class})
+    public Response methodArgumentNotValidExceptionHandler(IllegalArgumentException ex) {
+        log.error("参数校验错误", ex);
+        // 422 表示无法处理的实体
+        return new Response(500001, "[Assert Error]" + ex.getMessage(), null);
+    }
+
     @ExceptionHandler({MethodArgumentNotValidException.class})
     public Response methodArgumentNotValidExceptionHandler(MethodArgumentNotValidException ex) {
         log.error("参数校验错误", ex);
-        // 422 表示无法处理的实体
-        return new Response(422, ex.getMessage(), null);
+
+        List<ErrorMsg> msgs = ex.getBindingResult().getAllErrors().stream().map(objectError -> {
+            if (!(objectError instanceof FieldError)) {
+                log.warn("类型无法识别{}", POJOUtils.toString(objectError));
+            }
+
+            FieldError error = (FieldError)objectError;
+            ErrorMsg errorMsg = new ErrorMsg(error.getField(), error.getDefaultMessage());
+            return errorMsg;
+        }).collect(Collectors.toList());
+
+        return new Response(500002, "[Validation Error]" + POJOUtils.toString(msgs), null);
     }
 
 
@@ -30,5 +56,12 @@ public class AssetExceptionHandler {
         }
 
         return new Response(ex.getCode(), ex.getMessage(), null);
+    }
+
+    @Data
+    @AllArgsConstructor
+    static class ErrorMsg {
+        private String field;
+        private String message;
     }
 }
