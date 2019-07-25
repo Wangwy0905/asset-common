@@ -1,6 +1,6 @@
 package com.weshare.asset.common.exception;
 
-import org.modelmapper.internal.util.Assert;
+import org.springframework.util.Assert;
 
 /**
  *

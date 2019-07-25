@@ -25,7 +25,10 @@ public class AssetExceptionHandler {
 
     @ExceptionHandler({AssetException.class})
     public Response assetExceptionHandler(AssetException ex) {
-        log.error("系统异常", ex);
+        if (ex.getCause() != null) {
+            log.error("系统异常", ex.getCause());
+        }
+
         return new Response(ex.getCode(), ex.getMessage(), null);
     }
 }
