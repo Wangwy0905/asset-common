@@ -16,7 +16,7 @@ public class AssetExceptionHandler {
     @ExceptionHandler({MethodArgumentNotValidException.class})
     public Response methodArgumentNotValidExceptionHandler(MethodArgumentNotValidException ex) {
         // 422 表示无法处理的实体
-        return new Response(422, ex.getMessage());
+        return new Response(422, ex.getMessage(), null);
     }
 
 
