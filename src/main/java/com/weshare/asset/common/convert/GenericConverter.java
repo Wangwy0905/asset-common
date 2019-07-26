@@ -13,6 +13,10 @@ import java.util.Set;
 public class GenericConverter implements ConditionalGenericConverter {
     private static final ModelMapper mapper = new ModelMapper();
 
+    static {
+        mapper.getConfiguration().setAmbiguityIgnored(true);
+    }
+
     @Override
     public boolean matches(TypeDescriptor sourceType, TypeDescriptor targetType) {
         if (sourceType.getType() == targetType.getType()) return false;
