@@ -8,17 +8,11 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataAccessException;
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.http.converter.HttpMessageNotReadableException;
-import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import java.sql.SQLException;
-import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -41,12 +35,13 @@ public class AssetExceptionHandler {
         log.error("参数校验错误", ex);
 
         List<ErrorMsg> msgs = ex.getBindingResult().getAllErrors().stream().map(objectError -> {
-            if (!(objectError instanceof FieldError)) {
-                log.warn("类型无法识别{}", POJOUtils.toString(objectError));
+            if (objectError instanceof FieldError) {
+                FieldError error = (FieldError)objectError;
+                ErrorMsg errorMsg = new ErrorMsg(error.getField(), error.getDefaultMessage());
+                return errorMsg;
             }
 
-            FieldError error = (FieldError)objectError;
-            ErrorMsg errorMsg = new ErrorMsg(error.getField(), error.getDefaultMessage());
+            ErrorMsg errorMsg = new ErrorMsg(objectError.getObjectName(), objectError.getDefaultMessage());
             return errorMsg;
         }).collect(Collectors.toList());
 
