@@ -39,6 +39,10 @@ public class Response<T> {
     public static <T> Response<List<T>> success(List<?> sourceList, Class<T> type) {
         List<T> targetList = new ArrayList<T>();
 
+        if (sourceList == null) {
+            sourceList = new ArrayList<>();
+        }
+
         for (Object sourceObj : sourceList) {
             targetList.add(ConversionUtils.convert(sourceObj, type));
         }
