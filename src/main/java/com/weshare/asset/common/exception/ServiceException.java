@@ -23,7 +23,10 @@ public class ServiceException extends AssetException {
     }
 
     public ServiceException(String message, Object... args) {
-        super(String.format(message, args));
+        super(MessageFormat.format(message, args));
+    }
+    public ServiceException(String message, Throwable ex, Object... args) {
+        super(MessageFormat.format(message, args), ex);
     }
 
     public ServiceException(Integer code, String message, Throwable ex) {
