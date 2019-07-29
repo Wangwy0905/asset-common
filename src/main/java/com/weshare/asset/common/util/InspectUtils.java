@@ -1,5 +1,8 @@
 package com.weshare.asset.common.util;
 
+import com.weshare.asset.common.exception.InvalidRequestException;
+import org.modelmapper.internal.util.Assert;
+
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
@@ -7,6 +10,16 @@ import javax.validation.ValidatorFactory;
 import java.util.Set;
 
 public class InspectUtils {
+    public static <T> void validateRequest(T request) throws InvalidRequestException {
+        Assert.notNull(request, "传入参数不能为空！");
+        Set<ConstraintViolation<T>> validations = InspectUtils.validate(request);
+        if (validations == null || validations.size() == 0) {
+            return ;
+        }
+
+        throw new InvalidRequestException(400002, validations);
+    }
+
     public static <T> Set<ConstraintViolation<T>> validate(T inspectable) {
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         Validator validator = factory.getValidator();

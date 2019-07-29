@@ -15,7 +15,7 @@ public class Response<T> {
     //非业务类异常
     public static final int SYSTEM_ERROR = 500;
     //业务类异常
-    public static final int BUSINESS_ERROR = 400;
+    public static final int BUSINESS_ERROR = 400001;
     //成功 message描述
     public static final String SUCCESS_MESSAGE = "成功";
     //非业务类异常 message描述

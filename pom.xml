@@ -17,7 +17,7 @@
             <version>1.18.4</version>
             <scope>provided</scope>
         </dependency>
-        <!-- LOGS -->
+        <!-- Logs -->
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>

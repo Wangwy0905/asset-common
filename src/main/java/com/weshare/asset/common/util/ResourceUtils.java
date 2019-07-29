@@ -32,7 +32,7 @@ public class ResourceUtils {
         try {
             return POJOUtils.deserialize(content, type);
         } catch (Throwable th) {
-            throw new ServiceException("从文件[{0}]中读取对象失败，请检查配置！", filename);
+            throw new ServiceException("从文件[{0}]中读取对象失败，请检查配置！", th, filename);
         }
     }
 
