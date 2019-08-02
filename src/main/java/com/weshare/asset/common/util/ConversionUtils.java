@@ -34,8 +34,6 @@ public class ConversionUtils {
             return null;
         }
 
-        return source.stream().map(obj -> {
-            return conversionService.convert(obj, type);
-        }).collect(Collectors.toList());
+        return source.stream().map(obj -> conversionService.convert(obj, type)).collect(Collectors.toList());
     }
 }
