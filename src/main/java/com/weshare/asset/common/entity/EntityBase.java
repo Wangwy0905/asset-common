@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @MappedSuperclass
 public class EntityBase {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected Long id;
 
     @Column(name="CREATOR", length=128, nullable=false, unique=false)
