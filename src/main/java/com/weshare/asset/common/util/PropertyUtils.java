@@ -61,19 +61,27 @@ public class PropertyUtils {
 
         for (PropertyDescriptor targetPd : targetPds) {
             Method writeMethod = targetPd.getWriteMethod();
-            if (writeMethod == null || (ignoreList != null && ignoreList.contains(targetPd.getName()))) continue;
+            if (writeMethod == null || (ignoreList != null && ignoreList.contains(targetPd.getName()))) {
+                continue;
+            }
 
             PropertyDescriptor sourcePd = reflectionProxy(source.getClass(), "getPropertyDescriptor", targetPd.getName(), PropertyDescriptor.class);
-            if (sourcePd == null) continue;
+            if (sourcePd == null) {
+                continue;
+            }
 
             Method readMethod = sourcePd.getReadMethod();
-            if (readMethod == null || !ClassUtils.isAssignable(writeMethod.getParameterTypes()[0], readMethod.getReturnType()))  continue;
+            if (readMethod == null || !ClassUtils.isAssignable(writeMethod.getParameterTypes()[0], readMethod.getReturnType()))  {
+                continue;
+            }
 
             try {
                 readMethod.setAccessible(true);
                 Object value = readMethod.invoke(source);
 
-                if (value == null) continue;
+                if (value == null || value.toString().trim().length() == 0) {
+                    continue;
+                }
 
                 writeMethod.setAccessible(true);
                 writeMethod.invoke(target, value);
