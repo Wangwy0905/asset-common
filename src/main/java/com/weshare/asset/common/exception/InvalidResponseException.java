@@ -37,5 +37,6 @@ public class InvalidResponseException extends AssetCallRemoteException {
     static class Violation {
         private String path;
         private String message;
+        private String propertyPath;
     }
 }
