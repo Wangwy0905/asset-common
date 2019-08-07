@@ -9,7 +9,7 @@ import javax.validation.ConstraintViolation;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class InvalidRequestException extends ServiceException {
+public class InvalidRequestException extends AssetCallRemoteException {
     public InvalidRequestException() {
         super(Response.BUSINESS_ERROR, "请求参数错误！");
     }
