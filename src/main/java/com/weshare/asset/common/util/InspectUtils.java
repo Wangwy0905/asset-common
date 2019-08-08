@@ -2,7 +2,7 @@ package com.weshare.asset.common.util;
 
 import com.weshare.asset.common.exception.InvalidRequestException;
 import com.weshare.asset.common.exception.InvalidResponseException;
-import org.modelmapper.internal.util.Assert;
+import org.springframework.util.Assert;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
