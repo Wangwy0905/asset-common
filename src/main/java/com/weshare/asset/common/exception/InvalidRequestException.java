@@ -27,7 +27,7 @@ public class InvalidRequestException extends AssetCallRemoteException {
     }
 
     public <T> InvalidRequestException(Integer code, Set<ConstraintViolation<T>> validations) {
-        super(code, "[Mock File Invalid]" + POJOUtils.toString(validations.stream().map(validation -> {
+        super(code, POJOUtils.toString(validations.stream().map(validation -> {
             Violation violation = ConversionUtils.convert(validation, Violation.class);
             return violation;
         }).collect(Collectors.toList())));
@@ -42,7 +42,6 @@ public class InvalidRequestException extends AssetCallRemoteException {
 
     @Data
     static class Violation {
-        private String path;
         private String message;
         private String propertyPath;
     }
