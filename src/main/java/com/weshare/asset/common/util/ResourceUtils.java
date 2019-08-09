@@ -66,7 +66,7 @@ public class ResourceUtils {
 
     private static File getConfigFile(String filename) throws IOException {
         ResourceLoader resourceLoader = new DefaultResourceLoader();
-        return resourceLoader.getResource("file:./" + filename).getFile();
+        return resourceLoader.getResource("file:./config/" + filename).getFile();
     }
 
     private static File getDefaultFile(String filename) throws IOException {
