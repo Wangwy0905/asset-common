@@ -24,47 +24,6 @@ public class RandomUtils {
         }
     }
 
-    /**
-     * 获取真随机字符串
-     *
-     * @param length
-     * @return
-     * @throws NoSuchAlgorithmException
-     */
-    public static char[] createRandomChar(int length) {
-        Assert.isTrue(length > 0, "长度不能小于0");
-
-        char[] result = new char[length];
-
-        for (int i = 0; i < result.length; i++) {
-            result[i] = CHAR_32[random.nextInt(CHAR_32.length)];
-        }
-
-        return result;
-    }
-
-    /**
-     * 获取真随机纯数字字符串
-     *
-     * @param length
-     * @return
-     * @throws NoSuchAlgorithmException
-     */
-    public static char[] createRandomNum(int length) {
-        Assert.isTrue(length > 0, "长度不能小于0");
-
-        char[] result = new char[length];
-        for (int i = 0; i < length; i++) {
-            result[i] = PURE_NUM[random.nextInt(PURE_NUM.length)];
-        }
-
-        return result;
-    }
-
-    public static final String uuid() {
-        return UUID.randomUUID().toString().replaceAll("-", "");
-    }
-
     public static boolean createRandomBoolean() {
         return random.nextInt() % 2 == 0;
     }
@@ -87,5 +46,32 @@ public class RandomUtils {
 
     public static double createRandomDouble() {
         return random.nextDouble();
+    }
+
+    public static char[] createRandomChar(int length) {
+        Assert.isTrue(length > 0, "长度不能小于0");
+
+        char[] result = new char[length];
+
+        for (int i = 0; i < result.length; i++) {
+            result[i] = CHAR_32[random.nextInt(CHAR_32.length)];
+        }
+
+        return result;
+    }
+
+    public static char[] createRandomNum(int length) {
+        Assert.isTrue(length > 0, "长度不能小于0");
+
+        char[] result = new char[length];
+        for (int i = 0; i < length; i++) {
+            result[i] = PURE_NUM[random.nextInt(PURE_NUM.length)];
+        }
+
+        return result;
+    }
+
+    public static final String uuid() {
+        return UUID.randomUUID().toString().replaceAll("-", "");
     }
 }
