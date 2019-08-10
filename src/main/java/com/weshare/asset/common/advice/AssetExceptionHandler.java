@@ -8,6 +8,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataAccessException;
+import org.springframework.http.converter.HttpMessageConversionException;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -46,6 +48,12 @@ public class AssetExceptionHandler {
         }).collect(Collectors.toList());
 
         return new Response(500002, "[Validation Error]" + POJOUtils.toString(msgs), null);
+    }
+
+    @ExceptionHandler({HttpMessageConversionException.class})
+    public Response handleHttpMessageConversionException(HttpMessageConversionException ex) {
+        log.error("参数解析错误", ex);
+        return new Response(500003, "[Arg Error]" + ex.getMessage(), null);
     }
 
     @Data

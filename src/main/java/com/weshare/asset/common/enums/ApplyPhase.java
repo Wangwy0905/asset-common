@@ -6,7 +6,7 @@ public enum ApplyPhase {
     FACE("/process/face"),
     PBOC("/process/pboc"),
     BI("/process/basic-info"),
-    AC("/process/contact"),
+    AC("/process/add-contact"),
     PC("/process/policy-car"),
     APV("/process/apv"),
     BC("/process/bank-card"),
