@@ -64,4 +64,28 @@ public class RandomUtils {
     public static final String uuid() {
         return UUID.randomUUID().toString().replaceAll("-", "");
     }
+
+    public static boolean createRandomBoolean() {
+        return random.nextInt() % 2 == 0;
+    }
+
+    public static short createRandomShort() {
+        return (short)random.nextInt();
+    }
+
+    public static int createRandomInteger() {
+        return random.nextInt();
+    }
+
+    public static long createRandomLong() {
+        return random.nextLong();
+    }
+
+    public static float createRandomFloat() {
+        return random.nextFloat();
+    }
+
+    public static double createRandomDouble() {
+        return random.nextDouble();
+    }
 }

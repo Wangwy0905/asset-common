@@ -34,6 +34,10 @@ public class POJOUtils {
             return null;
         }
 
+        if (type.equals(String.class)) {
+            return (T)jsonStr;
+        }
+
         ObjectMapper mapper = new ObjectMapper();
         try {
             return mapper.readValue(jsonStr, type);
