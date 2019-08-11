@@ -8,6 +8,7 @@ import org.springframework.util.ClassUtils;
 import org.springframework.util.ReflectionUtils;
 
 import java.beans.PropertyDescriptor;
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
@@ -46,6 +47,7 @@ public class PropertyUtils {
             ReflectionUtils.invokeMethod(method, object, key, value);
             return ;
         }
+
     }
 
     public static <T> T override(T target, Object source) {
