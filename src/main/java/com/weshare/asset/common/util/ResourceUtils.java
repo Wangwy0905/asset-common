@@ -72,7 +72,13 @@ public class ResourceUtils {
             while ((line = br.readLine()) != null) {
                 sb.append(line).append("\r\n");
             }
-            return sb.toString();
+
+            String resultStr = sb.toString();
+            if (resultStr.length() == 0) {
+                return resultStr;
+            }
+
+            return resultStr.substring(0, resultStr.length() - "\r\n".length());
         }
     }
 
