@@ -12,7 +12,10 @@ import java.util.Set;
 
 public class InspectUtils {
     public static <T> T validateRequest(T request) throws InvalidRequestException {
-        Assert.notNull(request, "传入参数不能为空！");
+        if (request == null) {
+            return null;
+        }
+
         Set<ConstraintViolation<T>> validations = InspectUtils.validate(request);
         if (validations == null || validations.size() == 0) {
             return request;
