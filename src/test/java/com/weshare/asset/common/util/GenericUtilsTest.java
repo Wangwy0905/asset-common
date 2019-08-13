@@ -7,8 +7,8 @@ import static org.junit.Assert.*;
 
 public class GenericUtilsTest {
     @Test
-    public void testGetGenericSuperClassGenericType() {
-        assertThat(GenericUtils.getGenericSuperClassGenericType(Child.class).getSimpleName(), is("String"));
+    public void testGetGenericType() {
+        assertThat(GenericUtils.getGenericType(new Child()).getSimpleName(), is("String"));
     }
 
     static class Parent<T> {

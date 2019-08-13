@@ -7,7 +7,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Type;
 
 public class GenericUtils {
-    public static Class<?> getGenericSuperClassGenericType(Object object) {
+    public static Class<?> getGenericType(Object object) {
         Assert.notNull(object, "传入Class对象不能为空");
         Type type = object.getClass().getGenericSuperclass();
 
