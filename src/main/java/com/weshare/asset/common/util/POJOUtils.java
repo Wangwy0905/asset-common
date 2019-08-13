@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.lang.Nullable;
 
 import java.io.IOException;
@@ -13,6 +14,7 @@ import java.util.List;
  * 一些工具方法
  * @author zhibin.wang
  */
+@Slf4j
 public class POJOUtils {
     @Nullable
     public static <E> String toString(E entity) {
@@ -26,8 +28,8 @@ public class POJOUtils {
         try {
             return mapper.writeValueAsString(entity);
         } catch (JsonProcessingException e) {
-            e.printStackTrace();
-            return null;
+            log.warn("数据序列化/反序列化失败", e);
+            throw new IllegalArgumentException("数据序列化/反序列化失败", e);
         }
     }
 
@@ -45,8 +47,8 @@ public class POJOUtils {
         try {
             return mapper.readValue(jsonStr, type);
         } catch (IOException e) {
-            e.printStackTrace();
-            return null;
+            log.warn("数据序列化/反序列化失败", e);
+            throw new IllegalArgumentException("数据序列化/反序列化失败", e);
         }
     }
 
@@ -73,8 +75,8 @@ public class POJOUtils {
             JavaType javaType = mapper.getTypeFactory().constructParametricType(List.class, type);
             return (List<T>)mapper.readValue(jsonStr, javaType);
         } catch (IOException e) {
-            e.printStackTrace();
-            return null;
+            log.warn("数据序列化/反序列化失败", e);
+            throw new IllegalArgumentException("数据序列化/反序列化失败", e);
         }
     }
 }
