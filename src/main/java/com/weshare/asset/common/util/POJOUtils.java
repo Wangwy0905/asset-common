@@ -32,7 +32,7 @@ public class POJOUtils {
         try {
             return mapper.writeValueAsString(entity);
         } catch (JsonProcessingException e) {
-            log.warn("数据序列化/反序列化失败", e);
+            // log.warn("数据序列化/反序列化失败", e);
             throw new IllegalArgumentException("数据序列化/反序列化失败", e);
         }
     }
@@ -51,7 +51,7 @@ public class POJOUtils {
         try {
             return mapper.readValue(jsonStr, type);
         } catch (IOException e) {
-            log.warn("数据序列化/反序列化失败", e);
+            // log.warn("数据序列化/反序列化失败", e);
             throw new IllegalArgumentException("数据序列化/反序列化失败", e);
         }
     }
@@ -79,7 +79,7 @@ public class POJOUtils {
             JavaType javaType = mapper.getTypeFactory().constructParametricType(List.class, type);
             return (List<T>)mapper.readValue(jsonStr, javaType);
         } catch (IOException e) {
-            log.warn("数据序列化/反序列化失败", e);
+            // log.warn("数据序列化/反序列化失败", e);
             throw new IllegalArgumentException("数据序列化/反序列化失败", e);
         }
     }
