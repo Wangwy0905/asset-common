@@ -22,6 +22,10 @@ public class POJOUtils {
             return null;
         }
 
+        if (entity instanceof String) {
+            return (String)entity;
+        }
+
         ObjectMapper mapper = new ObjectMapper();
         mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
 
