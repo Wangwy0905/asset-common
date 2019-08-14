@@ -9,7 +9,6 @@ import com.weshare.umg.response.base.Result;
 import com.weshare.umg.system.UrlConstant;
 import com.weshare.umg.util.Commons;
 import com.weshare.umg.util.EncryptUtils;
-import com.weshare.umg.util.JsonUtil;
 import org.springframework.web.client.RestTemplate;
 
 public class UmgRestClient {
@@ -42,7 +41,7 @@ public class UmgRestClient {
         Long timestamp = System.currentTimeMillis();
         request.setTimestamp(timestamp);
         request.setSign(EncryptUtils.sha256(timestamp + token));
-        String body = Commons.doRestPost(url, JsonUtil.convertObjectToJSON(request), restTemplate);
+        String body = Commons.doRestPost(url, POJOUtils.toString(request), restTemplate);
         Result<String> result = POJOUtils.deserialize(body, Result.class);
         return result;
     }
