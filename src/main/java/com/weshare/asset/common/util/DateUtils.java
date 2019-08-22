@@ -14,14 +14,6 @@ import java.util.Date;
  * @description：
  */
 public class DateUtils {
-    public static Date getNextMonthDate(Date date) {
-        Assert.notNull(date,"date must not be null.");
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(date);
-        calendar.add(Calendar.MONTH, 1);
-        return calendar.getTime();
-    }
-
     public static Date midnight() {
         Calendar cal = Calendar.getInstance();
         cal.set(Calendar.HOUR_OF_DAY, 0);
@@ -78,7 +70,16 @@ public class DateUtils {
         return false;
     }
 
-    public static long periodBeforeNow(Date date) {
+    public static int yearBeforeNow(Date birth) {
+        Assert.notNull(birth, "出生日期不能为空");
+
+        LocalDate now = LocalDate.now();
+        LocalDate theDay = midnight(birth);
+
+        return (int)theDay.until(now, ChronoUnit.YEARS);
+    }
+
+    public static long dayBeforeNow(Date date) {
         Assert.notNull(date, "日期不能为空");
         LocalDate now = LocalDate.now();
         LocalDate theDay = midnight(date);
@@ -90,4 +91,6 @@ public class DateUtils {
         Assert.notNull(date, "日期不能为空");
         return date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
     }
+
+
 }
