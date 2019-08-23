@@ -4,7 +4,9 @@ import org.junit.Test;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.Calendar;
+import java.util.Date;
 
 import static com.weshare.asset.common.util.DateUtils.dayBeforeNow;
 
@@ -25,5 +27,12 @@ public class DateUtilsTest {
         System.out.println(DateUtils.yearBeforeNow((new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")).parse("2019-08-22 12:00:01")));
         System.out.println(DateUtils.yearBeforeNow((new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")).parse("2019-08-21 12:00:01")));
         System.out.println(DateUtils.yearBeforeNow((new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")).parse("2018-08-22 12:00:01")));
+    }
+
+    @Test
+    public void testConvert() throws ParseException {
+        Date date1 = DateUtils.convert(LocalDateTime.now());
+        System.out.println(date1);
+        System.out.println(DateUtils.monthBeforeNow((new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")).parse("2019-07-23 08:00:01")));
     }
 }

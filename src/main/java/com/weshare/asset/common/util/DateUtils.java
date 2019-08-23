@@ -3,6 +3,7 @@ package com.weshare.asset.common.util;
 import org.springframework.util.Assert;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.Calendar;
@@ -70,13 +71,22 @@ public class DateUtils {
         return false;
     }
 
-    public static int yearBeforeNow(Date birth) {
-        Assert.notNull(birth, "出生日期不能为空");
+    public static int yearBeforeNow(Date date) {
+        Assert.notNull(date, "日期不能为空");
 
         LocalDate now = LocalDate.now();
-        LocalDate theDay = midnight(birth);
+        LocalDate theDay = midnight(date);
 
         return (int)theDay.until(now, ChronoUnit.YEARS);
+    }
+
+    public static int monthBeforeNow(Date date) {
+        Assert.notNull(date, "日期不能为空");
+
+        LocalDate now = LocalDate.now();
+        LocalDate theDay = midnight(date);
+
+        return (int)theDay.until(now, ChronoUnit.MONTHS);
     }
 
     public static long dayBeforeNow(Date date) {
@@ -92,5 +102,11 @@ public class DateUtils {
         return date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
     }
 
+    public static Date convert(LocalDateTime date) {
+        if (date == null) {
+            return null;
+        }
 
+        return Date.from(date.atZone(ZoneId.systemDefault()).toInstant());
+    }
 }

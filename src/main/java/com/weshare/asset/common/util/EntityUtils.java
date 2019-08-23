@@ -4,6 +4,9 @@ import com.weshare.asset.common.entity.EntityBase;
 import lombok.extern.slf4j.Slf4j;
 
 import java.time.LocalDateTime;
+import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 public class EntityUtils {
@@ -58,7 +61,9 @@ public class EntityUtils {
     }
 
     public static <T extends EntityBase> Iterable<T> overrideOperator(Iterable<T> entities, String username) {
-        if (entities == null) return null;
+        if (entities == null) {
+            return null;
+        }
 
         entities.forEach(entity -> overrideOperator(entity, username));
         return entities;
@@ -68,5 +73,16 @@ public class EntityUtils {
         entity.setCreator(username);
         entity.setModifier(username);
         return entity;
+    }
+
+    public static <T extends EntityBase> List<Date> getCreateDateList(List<T> entityList) {
+        if (entityList == null) {
+            return null;
+        }
+
+        return entityList.stream().map(entity -> {
+            LocalDateTime localDateTime = entity.getCreateDateTime();
+            return DateUtils.convert(localDateTime);
+        }).collect(Collectors.toList());
     }
 }
