@@ -8,12 +8,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.lang.Nullable;
+import org.springframework.lang.NonNull;
 
 import java.io.IOException;
 
 @Slf4j
 public class LogUtils {
+    private static final int MAX_LOG_STRING_LENGTH = 512;
+
     private static ObjectMapper objectMapper = new ObjectMapper();
     static {
         objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
@@ -23,17 +25,17 @@ public class LogUtils {
         objectMapper.registerModule(simpleModule);
     }
 
-    @Nullable
+    @NonNull
     public static <E> String toString(E entity) {
         if (entity == null) {
-            return null;
+            return "";
         }
 
         try {
             return objectMapper.writeValueAsString(entity);
         } catch (JsonProcessingException e) {
             log.warn("日志打印失败，无法序列化需打印对象", e);
-            return null;
+            return "";
         }
     }
 
@@ -45,7 +47,12 @@ public class LogUtils {
                 return ;
             }
 
-            gen.writeString(value.substring(0, 512));
+            if (value.length() < MAX_LOG_STRING_LENGTH) {
+                gen.writeString(value);
+                return ;
+            }
+
+            gen.writeString(value.substring(0, MAX_LOG_STRING_LENGTH));
         }
     }
 }
