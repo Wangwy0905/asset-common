@@ -28,7 +28,5 @@ public enum Relation {
     public String getName() {
         return this.name;
     }
-    // 兄弟、同学、其他亲属、其他、兄妹、接地、姐妹、本人
-
 
 }
