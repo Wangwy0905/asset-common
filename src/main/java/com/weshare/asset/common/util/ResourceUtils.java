@@ -7,9 +7,31 @@ import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.ResourceLoader;
 
 import java.io.*;
+import java.util.List;
 
 @Slf4j
 public class ResourceUtils {
+    /**
+     * 读取文件中的内容，并反序列化成指定对象
+     * @param filename
+     * @param type
+     * @param <T>
+     * @return
+     */
+    @NonNull public static <T> List<T> deserializeList(String filename, Class<T> type) throws ServiceException {
+        String content = getContent(filename);
+        if (content == null || content.length() == 0) {
+            log.warn("配置文件[{}]为空，请检查配置！", filename);
+            throw new ServiceException("配置文件[{0}]为空，请检查配置！", filename);
+        }
+
+        try {
+            return POJOUtils.deserializeList(content, type);
+        } catch (Throwable th) {
+            throw new ServiceException("从文件[{0}]中读取对象失败，请检查配置！", th, filename);
+        }
+    }
+
     /**
      * 读取文件中的内容，并反序列化成指定对象
      * @param filename
