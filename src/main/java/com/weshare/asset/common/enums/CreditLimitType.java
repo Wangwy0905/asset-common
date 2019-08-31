@@ -1,5 +1,5 @@
 package com.weshare.asset.common.enums;
 
-public enum ReviewType {
+public enum CreditLimitType {
     PEOPLE_REVIEW, MACHINE_REVIEW
 }
