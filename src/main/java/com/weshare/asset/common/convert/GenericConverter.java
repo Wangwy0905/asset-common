@@ -33,9 +33,9 @@ public class GenericConverter implements ConditionalGenericConverter {
 
     @Override
     public Object convert(Object source, TypeDescriptor sourceType, TypeDescriptor targetType) {
-        // if (targetType.getType().isAnnotationPresent(Jackson.class)) {
+        if (targetType.getType().isAnnotationPresent(Jackson.class)) {
             return JacksonConversionUtils.convert(source, targetType.getType());
-        // }
-        // return mapper.map(source, targetType.getType());
+        }
+        return mapper.map(source, targetType.getType());
     }
 }
