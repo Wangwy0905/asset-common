@@ -1,17 +1,17 @@
 package com.weshare.asset.common.enums;
 
 public enum ApplyPhase {
-    SA("/process/create", ""),
-    AUTH("/process/auth", ""),
-    FACE("/process/face", ""),
-    PBOC("/process/pboc", ""),
-    BI("/process/basic-info", ""),
-    AC("/process/add-contact", ""),
-    PC("/process/policy-car", ""),
-    APV("/process/apv", ""),
-    BC("/process/bank-card", ""),
-    ML("/process/make-loan", ""),
-    FIN("/process/finish", "")
+    SA("/process/create", "SA_DFT"),
+    AUTH("/process/auth", "AUTH_DFT"),
+    FACE("/process/face", "FACE_DFT"),
+    PBOC("/process/pboc", "PBOC_DFT"),
+    BI("/process/basic-info", "BI_DFT"),
+    AC("/process/add-contact", "AC_DFT"),
+    PC("/process/policy-car", "PC_DFT"),
+    APV("/process/apv", "APV_DFT"),
+    BC("/process/bank-card", "BC_DFT"),
+    ML("/process/make-loan", "ML_DFT"),
+    FIN("/process/finish", "FIN_DFT")
     ;
 
     private String serviceName;
