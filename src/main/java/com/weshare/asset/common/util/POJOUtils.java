@@ -16,6 +16,8 @@ import java.util.List;
  */
 @Slf4j
 public class POJOUtils {
+    private static final ObjectMapper mapper = new ObjectMapper();
+
     @Nullable
     public static <E> String toString(E entity) {
         if (entity == null) {
@@ -46,7 +48,7 @@ public class POJOUtils {
             return (T)readStr(jsonStr);
         }
 
-        ObjectMapper mapper = new ObjectMapper();
+
         try {
             return mapper.readValue(jsonStr, type);
         } catch (IOException e) {
@@ -72,7 +74,6 @@ public class POJOUtils {
             return null;
         }
 
-        ObjectMapper mapper = new ObjectMapper();
         try {
             JavaType javaType = mapper.getTypeFactory().constructParametricType(List.class, type);
             return (List<T>)mapper.readValue(jsonStr, javaType);

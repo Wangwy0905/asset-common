@@ -8,6 +8,7 @@ import java.lang.annotation.Target;
 /**
  * @author zhibin.wang
  */
+@Deprecated
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Jackson {
