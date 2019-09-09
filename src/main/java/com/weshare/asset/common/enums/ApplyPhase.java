@@ -11,7 +11,8 @@ public enum ApplyPhase {
     APV("/process/apv"),
     BC("/process/bank-card"),
     ML("/process/make-loan"),
-    FIN("/process/finish")
+    RP("/process/repayment"),
+    FIN("/process/finish"),
     ;
 
     private String serviceName;
