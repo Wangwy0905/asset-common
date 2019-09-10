@@ -11,6 +11,7 @@ public enum ApplyPhase {
     APV("/process/apv", "APV_DFT"),
     BC("/process/bank-card", "BC_DFT"),
     ML("/process/make-loan", "ML_DFT"),
+    RP("/process/repayment", "RP_DFT"),
     FIN("/process/finish", "FIN_DFT")
     ;
 
