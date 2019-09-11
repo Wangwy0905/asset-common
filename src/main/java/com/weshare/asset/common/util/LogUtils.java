@@ -17,11 +17,13 @@ public class LogUtils {
     private static final int MAX_LOG_STRING_LENGTH = 512;
 
     private static ObjectMapper objectMapper = new ObjectMapper();
+
     static {
         objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
 
         SimpleModule simpleModule = new SimpleModule();
         simpleModule.addSerializer(String.class, new LogStringSerializer());
+        simpleModule.addSerializer(new byte[0].getClass(), new LogByteSerializer());
         objectMapper.registerModule(simpleModule);
     }
 
@@ -44,15 +46,22 @@ public class LogUtils {
         public void serialize(String value, JsonGenerator gen, SerializerProvider serializers) throws IOException {
             if (value == null) {
                 gen.writeString(value);
-                return ;
+                return;
             }
 
             if (value.length() < MAX_LOG_STRING_LENGTH) {
                 gen.writeString(value);
-                return ;
+                return;
             }
 
             gen.writeString(value.substring(0, MAX_LOG_STRING_LENGTH));
+        }
+    }
+
+    static class LogByteSerializer extends JsonSerializer<byte[]> {
+        @Override
+        public void serialize(byte[] value, JsonGenerator gen, SerializerProvider serializers) throws IOException {
+            gen.writeBinary(value, 0, 1);
         }
     }
 }
