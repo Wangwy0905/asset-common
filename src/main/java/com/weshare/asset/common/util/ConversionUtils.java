@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 @Slf4j
 public class ConversionUtils {
     private static final DefaultConversionService conversionService;
+
     static {
         conversionService = new DefaultConversionService();
         conversionService.addConverter(new NothingConverter());
