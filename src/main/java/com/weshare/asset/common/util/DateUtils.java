@@ -109,4 +109,12 @@ public class DateUtils {
 
         return Date.from(date.atZone(ZoneId.systemDefault()).toInstant());
     }
+
+    public static LocalDateTime dateConvertLocalDateTime(Date date) {
+        if (date == null) {
+            return null;
+        }
+
+        return  date.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+    }
 }
