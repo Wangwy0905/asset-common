@@ -62,7 +62,7 @@ public class DateUtils {
         cal.setTime(date);
 
         int hour = cal.get(Calendar.HOUR_OF_DAY);
-        for (int i=0; i<hours.length; i++) {
+        for (int i = 0; i < hours.length; i++) {
             if (hour == hours[i]) {
                 return true;
             }
@@ -77,7 +77,7 @@ public class DateUtils {
         LocalDate now = LocalDate.now();
         LocalDate theDay = midnight(date);
 
-        return (int)theDay.until(now, ChronoUnit.YEARS);
+        return (int) theDay.until(now, ChronoUnit.YEARS);
     }
 
     public static int monthBeforeNow(Date date) {
@@ -86,7 +86,7 @@ public class DateUtils {
         LocalDate now = LocalDate.now();
         LocalDate theDay = midnight(date);
 
-        return (int)theDay.until(now, ChronoUnit.MONTHS);
+        return (int) theDay.until(now, ChronoUnit.MONTHS);
     }
 
     public static long dayBeforeNow(Date date) {
@@ -108,5 +108,12 @@ public class DateUtils {
         }
 
         return Date.from(date.atZone(ZoneId.systemDefault()).toInstant());
+    }
+
+    public static Date addDate(Date date, long day) {
+        long time = date.getTime(); // 得到指定日期的毫秒数
+        day = day * 24 * 60 * 60 * 1000; // 要加上的天数转换成毫秒数
+        time += day; // 相加得到新的毫秒数
+        return new Date(time); // 将毫秒数转换成日期
     }
 }
