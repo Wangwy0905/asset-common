@@ -62,7 +62,7 @@ public class DateUtils {
         cal.setTime(date);
 
         int hour = cal.get(Calendar.HOUR_OF_DAY);
-        for (int i=0; i<hours.length; i++) {
+        for (int i = 0; i < hours.length; i++) {
             if (hour == hours[i]) {
                 return true;
             }
@@ -77,7 +77,7 @@ public class DateUtils {
         LocalDate now = LocalDate.now();
         LocalDate theDay = midnight(date);
 
-        return (int)theDay.until(now, ChronoUnit.YEARS);
+        return (int) theDay.until(now, ChronoUnit.YEARS);
     }
 
     public static int monthBeforeNow(Date date) {
@@ -86,7 +86,7 @@ public class DateUtils {
         LocalDate now = LocalDate.now();
         LocalDate theDay = midnight(date);
 
-        return (int)theDay.until(now, ChronoUnit.MONTHS);
+        return (int) theDay.until(now, ChronoUnit.MONTHS);
     }
 
     public static long dayBeforeNow(Date date) {
@@ -116,5 +116,13 @@ public class DateUtils {
         }
 
         return  date.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+    }
+
+    public static Date addDate(Date date, int day) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.add(Calendar.DATE,day);
+        Date time = calendar.getTime();
+        return time;
     }
 }
