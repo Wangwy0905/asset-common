@@ -10,34 +10,43 @@ import java.util.stream.Collectors;
 
 @Slf4j
 public class EntityUtils {
+
+
     public static <T> T entityMerge(T target, Object source) {
         return PropertyUtils.override(target, source);
     }
 
+    public static <T> T entityMerge(T target, Object source, Boolean ignoreEmpty) {
+        return PropertyUtils.override(target, source, ignoreEmpty);
+    }
+
     /**
      * 属性拷贝，忽略creator字段
+     *
      * @param target
      * @param source
      * @param <T>
      * @return
      */
     public static <T> T entityUpdateMerge(T target, Object source) {
-        return PropertyUtils.override(target, source, "creator");
+        return PropertyUtils.override(target, source, true, "creator");
     }
 
     /**
      * 属性拷贝，忽略id字段
+     *
      * @param target
      * @param source
      * @param <T>
      * @return
      */
     public static <T> T entityPropertyMerge(T target, Object source) {
-        return PropertyUtils.override(target, source, "id");
+        return PropertyUtils.override(target, source, true, "id");
     }
 
     /**
      * 属性拷贝，忽略id字段
+     *
      * @param target
      * @param source
      * @param <T>
@@ -46,10 +55,10 @@ public class EntityUtils {
     public static <T> T entityPropertyMerge(T target, Object source, String... ignoreProperties) {
         String[] _ignoreProperties = new String[ignoreProperties.length + 1];
         _ignoreProperties[0] = "id";
-        for (int i=1; i<_ignoreProperties.length; i++)
-            _ignoreProperties[i] = ignoreProperties[i-1];
+        for (int i = 1; i < _ignoreProperties.length; i++)
+            _ignoreProperties[i] = ignoreProperties[i - 1];
 
-        return PropertyUtils.override(target, source, _ignoreProperties);
+        return PropertyUtils.override(target, source, true, _ignoreProperties);
     }
 
     public static <T extends EntityBase> T initEntity(T target) {
