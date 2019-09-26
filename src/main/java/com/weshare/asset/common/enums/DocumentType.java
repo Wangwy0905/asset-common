@@ -11,6 +11,7 @@ public enum DocumentType {
     ELECTRONIC_SIGNATURE_GRANT("电子签名授权书", true),
     LOAN_CONTRACT_12("贷款合同", true),
     LOAN_CONTRACT_36("贷款合同", true),
+    MER_LOAN_CONTRACT("贷款合同",true),
     ENTRUSTED_WITHHOLDING("扣款协议书", true),
     ID_CARD_FRONT("身份证正面照片", false),
     ID_CARD_BACK("身份证反面照片", false),
