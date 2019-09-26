@@ -12,7 +12,9 @@ public enum ApplyPhase {
     BC("/process/bank-card", "BC_DFT"),
     ML("/process/make-loan", "ML_DFT"),
     RP("/process/repayment", "RP_DFT"),
-    FIN("/process/finish", "FIN_DFT")
+    FIN("/process/finish", "FIN_DFT"),
+
+    MER_SA("/process/mer-create", "MER_DFT")
     ;
 
     private String serviceName;
