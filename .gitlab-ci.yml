@@ -14,7 +14,7 @@ build:
   script:
     - mvn $MAVEN_CLI_OPTS clean compile
   only:
-    - fxd-develop
+    - fj-develop
 
 test:
   stage: test
@@ -27,11 +27,11 @@ test:
         - target/surefire-reports/TEST-*.xml
         - target/failsafe-reports/TEST-*.xml
   only:
-    - fxd-develop
+    - fj-develop
 
 deploy:
   stage: deploy
   script:
     - mvn $MAVEN_CLI_OPTS deploy
   only:
-    - fxd-develop
+    - fj-develop
