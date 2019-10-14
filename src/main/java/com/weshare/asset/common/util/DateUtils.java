@@ -125,4 +125,13 @@ public class DateUtils {
         Date time = calendar.getTime();
         return time;
     }
+
+    public static Date addMouth(Date date, int mouth) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.add(Calendar.MONTH,mouth);
+        Date time = calendar.getTime();
+        return time;
+    }
+
 }
