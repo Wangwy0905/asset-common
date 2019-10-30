@@ -2,6 +2,7 @@ package com.weshare.asset.common.util;
 
 import com.weshare.asset.common.exception.ServiceException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.util.Assert;
 import org.springframework.util.ReflectionUtils;
 import java.io.*;
 import java.lang.reflect.Field;
@@ -16,26 +17,25 @@ import java.util.List;
 @Slf4j
 public class CsvUtils {
 
-    public static <T> void exportCsv( String[] propertys, List<T> list,String dirName,String fileName) throws ServiceException {
-            exportCsv(null, propertys, list,dirName,fileName);
+    public static <T> void exportCsv( String[] propertys, List<T> list,File file) throws ServiceException {
+            exportCsv(null, propertys, list,file);
     }
 
-    public static <T> void exportCsv(String[] titles, String[] propertys, List<T> list,String dirName,String fileName) throws ServiceException {
+    public static <T> void exportCsv(String[] titles, String[] propertys, List<T> list,File file) throws ServiceException {
+        Assert.notNull(file,"传入的文件不能为空");
+        if (!file.isFile()) {
+            throw new ServiceException("【导出csv文件】传入的不是文件，文件路径是："+file.getAbsolutePath());
+        }
 
-        File dir = new File(dirName);
-        if (!dir.exists()) {
-            if (!dir.mkdir()) {
-                log.error("【导出csv文件】创建目录失败，目录地址是：{}", dir.getAbsolutePath());
-                throw new ServiceException("【导出csv文件】创建目录失败");
-            }
-        } else {
-            if (!dir.isDirectory()) {
-                log.error("【导出csv文件】路径：{}已存在且不是一个目录",dir.getAbsolutePath());
-                throw new ServiceException("【导出csv文件】该路径已存在且不是一个目录");
+        File dir = file.getParentFile();
+        if (dir.getParent() != null) {
+            if (!dir.exists()) {
+                if (!dir.mkdir()) {
+                    throw new ServiceException("【导出csv文件】创建目录失败，目录路径是："+dir.getAbsolutePath());
+                }
             }
         }
 
-        File file = new File(dir, fileName + ".csv");
         //构建输出流，同时指定编码
         try (BufferedWriter bw= new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file,true), "gbk"))){
             //写标题
