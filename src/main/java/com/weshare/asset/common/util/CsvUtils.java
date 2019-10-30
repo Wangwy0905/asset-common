@@ -4,6 +4,8 @@ import com.weshare.asset.common.exception.ServiceException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.Assert;
 import org.springframework.util.ReflectionUtils;
+import org.springframework.util.StringUtils;
+
 import java.io.*;
 import java.lang.reflect.Field;
 import java.util.List;
@@ -46,7 +48,10 @@ public class CsvUtils {
                 }
                 bw.newLine();
             }
-            
+
+            if (list == null) {
+                return;
+            }
             //写行数据
             for (T t : list) {
                 Class<?> clazz = t.getClass();
