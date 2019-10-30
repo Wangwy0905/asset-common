@@ -54,7 +54,12 @@ public class CsvUtils {
                     Field field = ReflectionUtils.findField(clazz, property);
                     if (field != null) {
                         field.setAccessible(true);
-                        bw.write(ReflectionUtils.getField(field,t).toString());
+                        Object value = ReflectionUtils.getField(field, t);
+                        if (value == null) {
+                            bw.write("");
+                        } else {
+                            bw.write(String.valueOf(value));
+                        }
                         bw.write(",");
                     }
                 }
