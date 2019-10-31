@@ -1,5 +1,6 @@
 package com.weshare.asset.common.util;
 
+import com.weshare.asset.common.exception.AssetException;
 import com.weshare.asset.common.exception.ServiceException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.Assert;
@@ -19,27 +20,18 @@ import java.util.List;
 @Slf4j
 public class CsvUtils {
 
-    public static <T> void exportCsv( String[] propertys, List<T> list,File file) throws ServiceException {
-            exportCsv(null, propertys, list,file);
+    public static <T> void exportCsv(String[] properties, List<T> dataList, File file) throws AssetException {
+        exportCsv(null, properties, dataList, file);
     }
 
-    public static <T> void exportCsv(String[] titles, String[] propertys, List<T> list,File file) throws ServiceException {
-        Assert.notNull(file,"传入的文件不能为空");
-        if (!file.isFile()) {
-            throw new ServiceException("【导出csv文件】传入的不是文件，文件路径是："+file.getAbsolutePath());
-        }
-
-        File dir = file.getParentFile();
-        if (dir.getParent() != null) {
-            if (!dir.exists()) {
-                if (!dir.mkdir()) {
-                    throw new ServiceException("【导出csv文件】创建目录失败，目录路径是："+dir.getAbsolutePath());
-                }
-            }
+    public static <T> void exportCsv(String[] titles, String[] properties, List<T> dataList, File file) throws AssetException {
+        Assert.notNull(file, "传入的文件不能为空");
+        if (!file.exists() || !file.isFile()) {
+            throw new ServiceException("【{}】不存在或者不是文件", file.getAbsolutePath());
         }
 
         //构建输出流，同时指定编码
-        try (BufferedWriter bw= new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file,true), "gbk"))){
+        try (BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file, true), "utf-8"))) {
             //写标题
             if (titles != null) {
                 for (String title : titles) {
@@ -49,13 +41,13 @@ public class CsvUtils {
                 bw.newLine();
             }
 
-            if (list == null) {
+            if (dataList == null) {
                 return;
             }
             //写行数据
-            for (T t : list) {
+            for (T t : dataList) {
                 Class<?> clazz = t.getClass();
-                for (String property : propertys) {
+                for (String property : properties) {
                     Field field = ReflectionUtils.findField(clazz, property);
                     if (field != null) {
                         field.setAccessible(true);
@@ -72,8 +64,8 @@ public class CsvUtils {
             }
 
         } catch (IOException e) {
-            log.error("【导出csv文件】导出失败,原因是：{}",e.getMessage());
-            throw new ServiceException("【导出csv文件】导出失败", e);
+            log.error("csv文件导出异常", e);
+            throw new ServiceException("csv文件导出失败", e);
         }
     }
 }
