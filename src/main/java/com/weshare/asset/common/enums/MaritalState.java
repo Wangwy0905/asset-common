@@ -15,15 +15,6 @@ public enum MaritalState {
         this.name = name;
     }
 
-    public static MaritalState getMarital(String maritalStateName) {
-        for (MaritalState maritalState : values()) {
-            if (maritalState.name.equals(maritalStateName)) {
-                return maritalState;
-            }
-        }
-        return null;
-    }
-
     private String name;
     public String getName() {
         return this.name;
