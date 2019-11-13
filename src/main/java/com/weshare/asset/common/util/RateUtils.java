@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 
-public class Rateutils {
+public class RateUtils {
 
     public static Double convertToDouble(String rate) {
         if (rate == null) {
