@@ -19,11 +19,16 @@ public class ImageUtils {
         if (imgBase64Str == null || imgBase64Str.length() == 0) {
             return false;
         } else {
-            ByteArrayInputStream byteArrayInputStream = null;
+
+            BASE64Decoder decoder = new BASE64Decoder();
+            byte[] byteArray = new byte[0];
             try {
-                BASE64Decoder decoder = new BASE64Decoder();
-                byte[] byteArray = decoder.decodeBuffer(imgBase64Str);
-                byteArrayInputStream = new ByteArrayInputStream(byteArray);
+                byteArray = decoder.decodeBuffer(imgBase64Str);
+            } catch (IOException e) {
+               throw new ServiceException("base64解码失败", e);
+            }
+
+            try (ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(byteArray)) {
                 BufferedImage bufImg = ImageIO.read(byteArrayInputStream);
                 if (bufImg == null) {
                     return false;
@@ -31,14 +36,6 @@ public class ImageUtils {
                 bufImg = null;
             } catch (IOException e) {
                 throw new ServiceException("base64转图片异常", e);
-            } finally {
-                if (byteArrayInputStream != null) {
-                    try {
-                        byteArrayInputStream.close();
-                    } catch (IOException e) {
-                        throw new ServiceException("base64转图片关闭流异常", e);
-                    }
-                }
             }
         }
         return true;
