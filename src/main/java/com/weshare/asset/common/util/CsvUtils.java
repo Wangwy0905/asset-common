@@ -109,46 +109,34 @@ public class CsvUtils {
                 if (bos != null) {
                     bos.close();
                 }
-                // tempFile.delete();
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
     }
 
-    public static List<String> csvParsing(File file) throws ServiceException {
-        FileInputStream in = null;
-        BufferedReader reader = null;
-        try {
-            String charset = EncodeUtils.get_charset(file);
-            FileInputStream fileInputStream = new FileInputStream(file);
 
-            if ("GBK" == charset) reader = new BufferedReader(new InputStreamReader(fileInputStream, "GBK"));
-            if ("UTF-8" == charset) reader = new BufferedReader(new InputStreamReader(fileInputStream, "UTF-8"));
-            in = new FileInputStream(file);
-            List<String> fileString = new ArrayList<>();
+    public static List<String> csvParsing(File file) throws ServiceException {
+
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), "GBK"))) {
+            List<String> dataString = new ArrayList<>();
             String line;
-            String everyLine;
             while ((line = reader.readLine()) != null) {
-                everyLine = line;
-                fileString.add(everyLine);
+                if ("".equals(line)) {
+                    continue;
+                }
+                dataString.add(line);
             }
-            return fileString;
-        } catch (Exception e) {
+            return dataString;
+        } catch (IOException e) {
             e.printStackTrace();
             throw new ServiceException("csv文件解析失败", e);
         } finally {
             try {
-                if (in != null) {
-                    in.close();
-                }
-                if (reader != null) {
-                    reader.close();
-                }
-
                 file.delete();
-            } catch (IOException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
+                throw new ServiceException("该路径下" + file.getAbsolutePath() + "文件删除失败", e);
             }
         }
     }
