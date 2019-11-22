@@ -70,21 +70,18 @@ public class CsvUtils {
         }
     }
 
-    public static File base64ToCsv(String base64Content) throws ServiceException {
-        BufferedInputStream bis = null;
-        FileOutputStream fos = null;
-        BufferedOutputStream bos = null;
-        File tempFile;
+    public static List<String> base64ToCsv(String base64Content) throws AssetException {
 
+        File tempFile = null;
         try {
-            byte[] bytes = Base64.decode(base64Content);
-            ByteArrayInputStream byteInputStream = new ByteArrayInputStream(bytes);
-            bis = new BufferedInputStream(byteInputStream);
-            //生成临时文件
             tempFile = File.createTempFile("test", ".csv");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
-            fos = new FileOutputStream(tempFile);
-            bos = new BufferedOutputStream(fos);
+        try (BufferedInputStream bis = new BufferedInputStream(new ByteArrayInputStream(Base64.decode(base64Content)));
+             FileOutputStream fos = new FileOutputStream(tempFile);
+             BufferedOutputStream bos = new BufferedOutputStream(fos)) {
 
             byte[] buffer = new byte[1024];
             int length = bis.read(buffer);
@@ -92,31 +89,23 @@ public class CsvUtils {
                 bos.write(buffer, 0, length);
                 length = bis.read(buffer);
             }
+
             bos.flush();
 
-            return tempFile;
+            List<String> dataList = csvParsing(tempFile);
+
+            tempFile.delete();
+
+            return dataList;
+
         } catch (Exception e) {
             e.printStackTrace();
-            throw new ServiceException("csv文件转化失败", e);
-        } finally {
-            try {
-                if (bis != null) {
-                    bis.close();
-                }
-                if (fos != null) {
-                    fos.close();
-                }
-                if (bos != null) {
-                    bos.close();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            throw new ServiceException("csv文件操作失败", e);
         }
     }
 
 
-    public static List<String> csvParsing(File file) throws ServiceException {
+    private static List<String> csvParsing(File file) throws ServiceException {
 
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), "GBK"))) {
             List<String> dataString = new ArrayList<>();
@@ -131,13 +120,6 @@ public class CsvUtils {
         } catch (IOException e) {
             e.printStackTrace();
             throw new ServiceException("csv文件解析失败", e);
-        } finally {
-            try {
-                file.delete();
-            } catch (Exception e) {
-                e.printStackTrace();
-                throw new ServiceException("该路径下" + file.getAbsolutePath() + "文件删除失败", e);
-            }
         }
     }
 }
