@@ -1,14 +1,15 @@
 package com.weshare.asset.common.util;
 
+import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
 import com.weshare.asset.common.exception.AssetException;
 import com.weshare.asset.common.exception.ServiceException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.Assert;
 import org.springframework.util.ReflectionUtils;
-import org.springframework.util.StringUtils;
 
 import java.io.*;
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -66,6 +67,89 @@ public class CsvUtils {
         } catch (IOException e) {
             log.error("csv文件导出异常", e);
             throw new ServiceException("csv文件导出失败", e);
+        }
+    }
+
+    public static File base64ToCsv(String base64Content) throws ServiceException {
+        BufferedInputStream bis = null;
+        FileOutputStream fos = null;
+        BufferedOutputStream bos = null;
+        File tempFile;
+
+        try {
+            byte[] bytes = Base64.decode(base64Content);
+            ByteArrayInputStream byteInputStream = new ByteArrayInputStream(bytes);
+            bis = new BufferedInputStream(byteInputStream);
+            //生成临时文件
+            tempFile = File.createTempFile("test", ".csv");
+
+            fos = new FileOutputStream(tempFile);
+            bos = new BufferedOutputStream(fos);
+
+            byte[] buffer = new byte[1024];
+            int length = bis.read(buffer);
+            while (length != -1) {
+                bos.write(buffer, 0, length);
+                length = bis.read(buffer);
+            }
+            bos.flush();
+
+            return tempFile;
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new ServiceException("csv文件转化失败", e);
+        } finally {
+            try {
+                if (bis != null) {
+                    bis.close();
+                }
+                if (fos != null) {
+                    fos.close();
+                }
+                if (bos != null) {
+                    bos.close();
+                }
+                // tempFile.delete();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public static List<String> csvParsing(File file) throws ServiceException {
+        FileInputStream in = null;
+        BufferedReader reader = null;
+        try {
+            String charset = EncodeUtils.get_charset(file);
+            FileInputStream fileInputStream = new FileInputStream(file);
+
+            if ("GBK" == charset) reader = new BufferedReader(new InputStreamReader(fileInputStream, "GBK"));
+            if ("UTF-8" == charset) reader = new BufferedReader(new InputStreamReader(fileInputStream, "UTF-8"));
+            in = new FileInputStream(file);
+            List<String> fileString = new ArrayList<>();
+            String line;
+            String everyLine;
+            while ((line = reader.readLine()) != null) {
+                everyLine = line;
+                fileString.add(everyLine);
+            }
+            return fileString;
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new ServiceException("csv文件解析失败", e);
+        } finally {
+            try {
+                if (in != null) {
+                    in.close();
+                }
+                if (reader != null) {
+                    reader.close();
+                }
+
+                file.delete();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 }
