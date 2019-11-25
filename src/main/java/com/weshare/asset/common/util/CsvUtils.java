@@ -1,14 +1,15 @@
 package com.weshare.asset.common.util;
 
+import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
 import com.weshare.asset.common.exception.AssetException;
 import com.weshare.asset.common.exception.ServiceException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.Assert;
 import org.springframework.util.ReflectionUtils;
-import org.springframework.util.StringUtils;
 
 import java.io.*;
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -49,16 +50,17 @@ public class CsvUtils {
                 Class<?> clazz = t.getClass();
                 for (String property : properties) {
                     Field field = ReflectionUtils.findField(clazz, property);
-                    if (field != null) {
-                        field.setAccessible(true);
-                        Object value = ReflectionUtils.getField(field, t);
-                        if (value == null) {
-                            bw.write("");
-                        } else {
-                            bw.write(String.valueOf(value));
-                        }
-                        bw.write(",");
+                    if (field == null) {
+                        continue;
                     }
+                    field.setAccessible(true);
+                    Object value = ReflectionUtils.getField(field, t);
+                    if (value == null) {
+                        bw.write("");
+                    } else {
+                        bw.write(String.valueOf(value));
+                    }
+                    bw.write(",");
                 }
                 bw.newLine();
             }
@@ -68,4 +70,28 @@ public class CsvUtils {
             throw new ServiceException("csv文件导出失败", e);
         }
     }
+
+    public static List<String> base64ToList(String base64Content) throws AssetException {
+        return inputStreamToList(new ByteArrayInputStream(Base64.decode(base64Content)));
+    }
+
+    public static List<String> inputStreamToList(InputStream inputStream) throws AssetException {
+
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, "GBK"))) {
+            List<String> dataList = new ArrayList<>();
+            String line;
+            while ((line = reader.readLine()) != null) {
+                if ("".equals(line)) {
+                    continue;
+                }
+                dataList.add(line);
+            }
+            return dataList;
+        } catch (IOException e) {
+            log.error("文件流解析失败", e);
+            throw new ServiceException("文件流解析失败", e);
+        }
+
+    }
+
 }
