@@ -50,16 +50,17 @@ public class CsvUtils {
                 Class<?> clazz = t.getClass();
                 for (String property : properties) {
                     Field field = ReflectionUtils.findField(clazz, property);
-                    if (field != null) {
-                        field.setAccessible(true);
-                        Object value = ReflectionUtils.getField(field, t);
-                        if (value == null) {
-                            bw.write("");
-                        } else {
-                            bw.write(String.valueOf(value));
-                        }
-                        bw.write(",");
+                    if (field == null) {
+                        continue;
                     }
+                    field.setAccessible(true);
+                    Object value = ReflectionUtils.getField(field, t);
+                    if (value == null) {
+                        bw.write("");
+                    } else {
+                        bw.write(String.valueOf(value));
+                    }
+                    bw.write(",");
                 }
                 bw.newLine();
             }
@@ -70,56 +71,27 @@ public class CsvUtils {
         }
     }
 
-    public static List<String> base64ToCsv(String base64Content) throws AssetException {
-
-        File tempFile = null;
-        try {
-            tempFile = File.createTempFile("test", ".csv");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        try (BufferedInputStream bis = new BufferedInputStream(new ByteArrayInputStream(Base64.decode(base64Content)));
-             FileOutputStream fos = new FileOutputStream(tempFile);
-             BufferedOutputStream bos = new BufferedOutputStream(fos)) {
-
-            byte[] buffer = new byte[1024];
-            int length = bis.read(buffer);
-            while (length != -1) {
-                bos.write(buffer, 0, length);
-                length = bis.read(buffer);
-            }
-
-            bos.flush();
-
-            List<String> dataList = csvParsing(tempFile);
-
-            tempFile.delete();
-
-            return dataList;
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new ServiceException("csv文件操作失败", e);
-        }
+    public static List<String> base64ToList(String base64Content) throws AssetException {
+        return inputStreamToList(new ByteArrayInputStream(Base64.decode(base64Content)));
     }
 
+    public static List<String> inputStreamToList(InputStream inputStream) throws AssetException {
 
-    private static List<String> csvParsing(File file) throws ServiceException {
-
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), "GBK"))) {
-            List<String> dataString = new ArrayList<>();
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, "GBK"))) {
+            List<String> dataList = new ArrayList<>();
             String line;
             while ((line = reader.readLine()) != null) {
                 if ("".equals(line)) {
                     continue;
                 }
-                dataString.add(line);
+                dataList.add(line);
             }
-            return dataString;
+            return dataList;
         } catch (IOException e) {
-            e.printStackTrace();
-            throw new ServiceException("csv文件解析失败", e);
+            log.error("文件流解析失败", e);
+            throw new ServiceException("文件流解析失败", e);
         }
+
     }
+
 }
