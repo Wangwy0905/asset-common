@@ -27,7 +27,7 @@ public class RateUtils {
             return null;
         }
 
-        DecimalFormat df = new DecimalFormat("0.000000%");
+        DecimalFormat df = new DecimalFormat("0.0000%");
         return df.format(rate);
     }
 }
