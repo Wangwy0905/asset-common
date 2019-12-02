@@ -1,10 +1,12 @@
 package com.weshare.asset.common.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.weshare.asset.common.util.ConversionUtils;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Data
@@ -24,6 +26,8 @@ public class Response<T> {
     private int status;
     private T payload;
     private String message;
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
+    private Date responseTime = new Date();
 
     public Response(int status, T payload) {
         this.status = status;
