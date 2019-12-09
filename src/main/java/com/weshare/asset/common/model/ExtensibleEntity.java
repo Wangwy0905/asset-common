@@ -1,6 +1,5 @@
 package com.weshare.asset.common.model;
 
-import com.weshare.asset.common.util.ConversionUtils;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;

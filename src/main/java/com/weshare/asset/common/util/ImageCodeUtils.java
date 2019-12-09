@@ -1,19 +1,14 @@
 package com.weshare.asset.common.util;
 
 import com.weshare.asset.common.exception.BizException;
-import com.weshare.asset.common.util.FileCoderUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
-import org.springframework.util.Base64Utils;
 
-import javax.imageio.ImageIO;
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics;
 import java.awt.image.BufferedImage;
-import java.awt.image.RenderedImage;
-import java.io.ByteArrayOutputStream;
 import java.security.SecureRandom;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * @Description:

@@ -2,8 +2,6 @@ package com.weshare.asset.common.util;
 
 import org.junit.Test;
 
-import static org.junit.Assert.*;
-
 public class InstanceUtilsTest {
     @Test
     public void testLocalHost() {

@@ -1,6 +1,5 @@
 package com.weshare.asset.common.util;
 
-import com.weshare.asset.common.exception.AssetException;
 import com.weshare.asset.common.exception.BizException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.binary.Base64;
@@ -9,7 +8,6 @@ import org.springframework.util.Base64Utils;
 import sun.misc.BASE64Decoder;
 
 import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
 import java.awt.image.RenderedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
