@@ -3,22 +3,29 @@ package com.weshare.asset.common.entity;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.LastModifiedBy;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
+import javax.persistence.Column;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.MappedSuperclass;
 import java.time.LocalDateTime;
 
 @Data
 @MappedSuperclass
 public class EntityBase {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected Long id;
 
-    @Column(columnDefinition = "varchar(255) default 'system' COMMENT '创建人'")
-    protected String creator;
-    @Column(columnDefinition = "varchar(255) default 'system' COMMENT '修改人'")
-    protected String modifier;
+    @Column(name = "CREATOR", length = 128, nullable = false, unique = false)
+    @CreatedBy
+    protected String creator = "system";
+    @Column(name = "MODIFIER", length = 128, nullable = false, unique = false)
+    @LastModifiedBy
+    protected String modifier = "system";
 
     @CreationTimestamp
     protected LocalDateTime createDateTime;

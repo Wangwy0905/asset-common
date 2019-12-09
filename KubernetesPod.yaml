@@ -1,0 +1,68 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    app.kubernetes.io/name: jnlp-slave
+spec:
+  hostAliases:
+  - hostnames:
+    - gitlab.qianhaipre.com
+    ip: 10.83.0.68
+  initContainers:
+  - name: fix-permissions
+    image: busybox
+    command: ["sh", "-c", "chown -R 1000:1000 /home/jenkins/agent"]
+    env:
+    - name: JENKINS_JNLP_INSTANCE
+      valueFrom:
+        fieldRef:
+          fieldPath: metadata.name
+    securityContext:
+      privileged: true
+    volumeMounts:
+    - name: workspace-volume
+      mountPath: /home/jenkins/agent
+      subPathExpr: $(JENKINS_JNLP_INSTANCE)/agent
+  containers:
+  - name: maven
+    image: maven:alpine
+    command:
+    - cat
+    tty: true
+    env:
+    - name: JENKINS_JNLP_INSTANCE
+      valueFrom:
+        fieldRef:
+          fieldPath: metadata.name
+    volumeMounts:
+    - name: workspace-volume
+      mountPath: /home/jenkins/agent
+      subPathExpr: $(JENKINS_JNLP_INSTANCE)/agent
+    - name: maven-volume
+      mountPath: /root/.m2
+  - name: jnlp
+    image: jenkins/jnlp-slave:3.35-5-alpine
+    env:
+    - name: JENKINS_JNLP_INSTANCE
+      valueFrom:
+        fieldRef:
+          fieldPath: metadata.name
+    volumeMounts:
+    - name: workspace-volume
+      mountPath: /home/jenkins/agent
+      subPathExpr: $(JENKINS_JNLP_INSTANCE)/agent
+    - name: git-config
+      mountPath: /home/jenkins/.gitconfig
+  volumes:
+  - name: workspace-volume
+    hostPath:
+      path: /share/build/agent
+      type: DirectoryOrCreate
+  - name: git-config
+    hostPath:
+      path: /share/build/git/.gitconfig
+      type: FileOrCreate
+  - name: maven-volume
+    hostPath:
+      path: /share/build/maven/.m2
+      type: DirectoryOrCreate

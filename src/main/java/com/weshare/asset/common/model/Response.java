@@ -1,10 +1,12 @@
 package com.weshare.asset.common.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.weshare.asset.common.util.ConversionUtils;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Data
@@ -15,7 +17,7 @@ public class Response<T> {
     //非业务类异常
     public static final int SYSTEM_ERROR = 500;
     //业务类异常
-    public static final int BUSINESS_ERROR = 400;
+    public static final int BUSINESS_ERROR = 400001;
     //成功 message描述
     public static final String SUCCESS_MESSAGE = "成功";
     //非业务类异常 message描述
@@ -24,6 +26,8 @@ public class Response<T> {
     private int status;
     private T payload;
     private String message;
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
+    private Date responseTime = new Date();
 
     public Response(int status, T payload) {
         this.status = status;
@@ -38,6 +42,10 @@ public class Response<T> {
 
     public static <T> Response<List<T>> success(List<?> sourceList, Class<T> type) {
         List<T> targetList = new ArrayList<T>();
+
+        if (sourceList == null) {
+            sourceList = new ArrayList<>();
+        }
 
         for (Object sourceObj : sourceList) {
             targetList.add(ConversionUtils.convert(sourceObj, type));

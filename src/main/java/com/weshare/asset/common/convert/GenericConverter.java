@@ -4,6 +4,7 @@ import com.weshare.asset.common.annotation.Jackson;
 import com.weshare.asset.common.util.JacksonConversionUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.core.convert.TypeDescriptor;
 import org.springframework.core.convert.converter.ConditionalGenericConverter;
 
@@ -12,6 +13,11 @@ import java.util.Set;
 @Slf4j
 public class GenericConverter implements ConditionalGenericConverter {
     private static final ModelMapper mapper = new ModelMapper();
+
+    static {
+        mapper.getConfiguration().setAmbiguityIgnored(true);
+        mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
+    }
 
     @Override
     public boolean matches(TypeDescriptor sourceType, TypeDescriptor targetType) {

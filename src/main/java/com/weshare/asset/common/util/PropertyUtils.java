@@ -19,13 +19,13 @@ public class PropertyUtils {
         Method method = ReflectionUtils.findMethod(object.getClass(), getMethodName);
         if (method != null) {
             method.setAccessible(true);
-            return (T)ReflectionUtils.invokeMethod(method, object);
+            return (T) ReflectionUtils.invokeMethod(method, object);
         }
 
         method = ReflectionUtils.findMethod(object.getClass(), "get", Object.class);
         if (method != null) {
             method.setAccessible(true);
-            return (T)ReflectionUtils.invokeMethod(method, object, key);
+            return (T) ReflectionUtils.invokeMethod(method, object, key);
         }
 
         return null;
@@ -37,22 +37,31 @@ public class PropertyUtils {
         if (method != null) {
             method.setAccessible(true);
             ReflectionUtils.invokeMethod(method, object, value);
-            return ;
+            return;
         }
 
         method = ReflectionUtils.findMethod(object.getClass(), "set", key.getClass(), value.getClass());
         if (method != null) {
             method.setAccessible(true);
             ReflectionUtils.invokeMethod(method, object, key, value);
-            return ;
+            return;
         }
+
+    }
+
+    public static <T> T override(T target, Object source, Boolean ignoreEmpty) {
+        return override(target, source, ignoreEmpty, null);
     }
 
     public static <T> T override(T target, Object source) {
-        return override(target, source, null);
+        return override(target, source, true, null);
     }
 
     public static <T> T override(T target, Object source, String... ignoreProperties) {
+        return override(target, source, true, ignoreProperties);
+    }
+
+    public static <T> T override(T target, Object source, Boolean ignoreEmpty, String... ignoreProperties) {
         Assert.notNull(source, "Source must not be null");
         Assert.notNull(target, "Target must not be null");
 
@@ -61,24 +70,31 @@ public class PropertyUtils {
 
         for (PropertyDescriptor targetPd : targetPds) {
             Method writeMethod = targetPd.getWriteMethod();
-            if (writeMethod == null || (ignoreList != null && ignoreList.contains(targetPd.getName()))) continue;
+            if (writeMethod == null || (ignoreList != null && ignoreList.contains(targetPd.getName()))) {
+                continue;
+            }
 
             PropertyDescriptor sourcePd = reflectionProxy(source.getClass(), "getPropertyDescriptor", targetPd.getName(), PropertyDescriptor.class);
-            if (sourcePd == null) continue;
+            if (sourcePd == null) {
+                continue;
+            }
 
             Method readMethod = sourcePd.getReadMethod();
-            if (readMethod == null || !ClassUtils.isAssignable(writeMethod.getParameterTypes()[0], readMethod.getReturnType()))  continue;
+            if (readMethod == null || !ClassUtils.isAssignable(writeMethod.getParameterTypes()[0], readMethod.getReturnType())) {
+                continue;
+            }
 
             try {
                 readMethod.setAccessible(true);
                 Object value = readMethod.invoke(source);
 
-                if (value == null) continue;
+                if (ignoreEmpty && (value == null || value.toString().trim().length() == 0)) {
+                    continue;
+                }
 
                 writeMethod.setAccessible(true);
                 writeMethod.invoke(target, value);
-            }
-            catch (Throwable ex) {
+            } catch (Throwable ex) {
                 throw new FatalBeanException("Could not copy property '" + targetPd.getName() + "' from source to target", ex);
             }
         }
@@ -90,7 +106,7 @@ public class PropertyUtils {
         Method forClass = ReflectionUtils.findMethod(CachedIntrospectionResults.class, "forClass", clazz.getClass());
 
         forClass.setAccessible(true);
-        CachedIntrospectionResults cr = (CachedIntrospectionResults)ReflectionUtils.invokeMethod(forClass, null, clazz);
+        CachedIntrospectionResults cr = (CachedIntrospectionResults) ReflectionUtils.invokeMethod(forClass, null, clazz);
 
 
         Method method = null;
@@ -98,7 +114,7 @@ public class PropertyUtils {
         if (arg != null) method = ReflectionUtils.findMethod(cr.getClass(), methodName, arg.getClass());
 
         method.setAccessible(true);
-        if (arg == null) return (T)ReflectionUtils.invokeMethod(method, cr);
-        return (T)ReflectionUtils.invokeMethod(method, cr, arg);
+        if (arg == null) return (T) ReflectionUtils.invokeMethod(method, cr);
+        return (T) ReflectionUtils.invokeMethod(method, cr, arg);
     }
 }

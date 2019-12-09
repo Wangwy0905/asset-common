@@ -1,46 +1,77 @@
 package com.weshare.asset.common.util;
 
-import org.passay.CharacterData;
-import org.passay.CharacterRule;
-import org.passay.EnglishCharacterData;
-import org.passay.PasswordGenerator;
+import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.internal.util.Assert;
 
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.util.UUID;
 
-import static org.passay.AllowedCharacterRule.ERROR_CODE;
-
+@Slf4j
 public class RandomUtils {
-    public static final String uuid() {
-        return UUID.randomUUID().toString().replaceAll("-", "");
+    private static final char[] CHAR_32 = new char[]{'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'J', 'K', 'L', 'M', 'N',
+            'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '2', '3', '4', '5', '6', '7', '8', '9'};
+
+    private static final char[] PURE_NUM = new char[]{'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
+
+    private static SecureRandom random;
+
+    static {
+        try {
+            random = SecureRandom.getInstance("SHA1PRNG");
+        } catch (NoSuchAlgorithmException e) {
+            log.warn("构造随机数生成器失败", e);
+        }
     }
 
-    public static final String generatePassayPassword() {
-        PasswordGenerator gen = new PasswordGenerator();
-        CharacterData lowerCaseChars = EnglishCharacterData.LowerCase;
-        CharacterRule lowerCaseRule = new CharacterRule(lowerCaseChars);
-        lowerCaseRule.setNumberOfCharacters(2);
+    public static boolean createRandomBoolean() {
+        return random.nextInt() % 2 == 0;
+    }
 
-        CharacterData upperCaseChars = EnglishCharacterData.UpperCase;
-        CharacterRule upperCaseRule = new CharacterRule(upperCaseChars);
-        upperCaseRule.setNumberOfCharacters(2);
+    public static short createRandomShort() {
+        return (short)random.nextInt();
+    }
 
-        CharacterData digitChars = EnglishCharacterData.Digit;
-        CharacterRule digitRule = new CharacterRule(digitChars);
-        digitRule.setNumberOfCharacters(2);
+    public static int createRandomInteger() {
+        return random.nextInt();
+    }
 
-        CharacterData specialChars = new CharacterData() {
-            public String getErrorCode() {
-                return ERROR_CODE;
-            }
+    public static long createRandomLong() {
+        return random.nextLong();
+    }
 
-            public String getCharacters() {
-                return "!@#$%^&*()_+";
-            }
-        };
-        CharacterRule splCharRule = new CharacterRule(specialChars);
-        splCharRule.setNumberOfCharacters(2);
+    public static float createRandomFloat() {
+        return random.nextFloat();
+    }
 
-        String password = gen.generatePassword(10, splCharRule, lowerCaseRule, upperCaseRule, digitRule);
-        return password;
+    public static double createRandomDouble() {
+        return random.nextDouble();
+    }
+
+    public static char[] createRandomChar(int length) {
+        Assert.isTrue(length > 0, "长度不能小于0");
+
+        char[] result = new char[length];
+
+        for (int i = 0; i < result.length; i++) {
+            result[i] = CHAR_32[random.nextInt(CHAR_32.length)];
+        }
+
+        return result;
+    }
+
+    public static char[] createRandomNum(int length) {
+        Assert.isTrue(length > 0, "长度不能小于0");
+
+        char[] result = new char[length];
+        for (int i = 0; i < length; i++) {
+            result[i] = PURE_NUM[random.nextInt(PURE_NUM.length)];
+        }
+
+        return result;
+    }
+
+    public static final String uuid() {
+        return UUID.randomUUID().toString().replaceAll("-", "");
     }
 }
