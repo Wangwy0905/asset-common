@@ -14,7 +14,7 @@ public enum ApplyPhase {
     RP("/process/repayment", "RP_DFT"),
     FIN("/process/finish", "FIN_DFT"),
 
-    MER_SA("/process/mer-create", "MER_DFT")
+    MER_SA("/process/mer-create", "SA_DFT")
     ;
 
     private String serviceName;
