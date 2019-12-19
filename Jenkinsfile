@@ -13,27 +13,29 @@ pipeline {
   }
   stages {
     stage('Check') {
-      revision = readMavenPom().getProperties().getProperty('revision')
-      if (!(revision && revision.endsWith("-SNAPSHOT"))) {
-          throw new Exception("pom.xml文件中的revision必须以-SNAPSHOT结尾")
-      }
+      script {
+        revision = readMavenPom().getProperties().getProperty('revision')
+        if (!(revision && revision.endsWith("-SNAPSHOT"))) {
+            throw new Exception("pom.xml文件中的revision必须以-SNAPSHOT结尾")
+        }
 
-      def branchName = env.getEnvironment().get('BRANCH_NAME')
-      Set branchSet = ["dev", "stg", "rel", "master"]
-      if (!(branchName ==~ /feat-\d+/ || branchSet.contains(branchName))) {
-        throw new Exception("分支命名不规范，仅支持feat-*/dev/stg/rel/master")
-      }
+        def branchName = env.getEnvironment().get('BRANCH_NAME')
+        Set branchSet = ["dev", "stg", "rel", "master"]
+        if (!(branchName ==~ /feat-\d+/ || branchSet.contains(branchName))) {
+          throw new Exception("分支命名不规范，仅支持feat-*/dev/stg/rel/master")
+        }
 
-      if (branchName ==~ /feat-\d+/) {
-        revision = revision.replaceAll('-SNAPSHOT', '.' + env.getEnvironment().BRANCH_NAME.substring(5) + '-SNAPSHOT')
-      }
+        if (branchName ==~ /feat-\d+/) {
+          revision = revision.replaceAll('-SNAPSHOT', '.' + env.getEnvironment().BRANCH_NAME.substring(5) + '-SNAPSHOT')
+        }
 
-      if (branchName == 'dev' || branchName == 'stg') {
-        revision = revision.replaceAll('-SNAPSHOT', '.' + env.getEnvironment().BRANCH_NAME + '-SNAPSHOT')
-      }
+        if (branchName == 'dev' || branchName == 'stg') {
+          revision = revision.replaceAll('-SNAPSHOT', '.' + env.getEnvironment().BRANCH_NAME + '-SNAPSHOT')
+        }
 
-      if (branchName == 'rel') {
-        revision = revision.replaceAll('-SNAPSHOT', '')
+        if (branchName == 'rel') {
+          revision = revision.replaceAll('-SNAPSHOT', '')
+        }
       }
     }
     stage('Build') {
