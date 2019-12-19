@@ -1,10 +1,14 @@
 package com.weshare.asset.common.util;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 
 public class RateUtils {
+    private static final Logger logger = LoggerFactory.getLogger(RateUtils.class);
 
     public static Double convertToDouble(String rate) {
         if (rate == null) {
@@ -16,7 +20,7 @@ public class RateUtils {
             Number number = nf.parse(rate);
             return number.doubleValue();
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.warn("字符串转换数字类型异常", e);
         }
 
         return null;
