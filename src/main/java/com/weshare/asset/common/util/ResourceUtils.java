@@ -67,10 +67,10 @@ public class ResourceUtils {
         } catch (IOException e) {
             log.info("未能从配置文件中读取[{}]文件", filename);
             try {
-                log.info("从jar/resource中读取[{}]文件", filename);
+                log.info("从runtime directory中读取[{}]文件", filename);
                 return new FileInputStream(getRuntimeFile(filename));
             } catch (IOException e1) {
-                log.info("未能从jar/resource中读取[{}]文件", filename);
+                log.info("未能从runtime directory中读取[{}]文件", filename);
                 log.warn("无法读取配置文件，请检查系统配置是否正确！", e1);
             }
         }
@@ -117,13 +117,15 @@ public class ResourceUtils {
     }
 
     private static File getRuntimeFile(String filename) throws IOException {
-        ResourceLoader resourceLoader = new DefaultResourceLoader();
-        File file = resourceLoader.getResource(filename).getFile();
-        if (file != null || filename.startsWith(CONF)) {
-            return file;
+        try {
+            ResourceLoader resourceLoader = new DefaultResourceLoader();
+            return resourceLoader.getResource(filename).getFile();
+        } catch (IOException e) {
+            if (!filename.startsWith(CONF)) {
+                log.info("从runtime config目录下读取[{}]文件", filename);
+                return getRuntimeFile(CONF + filename);
+            }
+            throw e;
         }
-
-        log.info("从runtime的config目录下读取[{}]文件", filename);
-        return getRuntimeFile(CONF + filename);
     }
 }
