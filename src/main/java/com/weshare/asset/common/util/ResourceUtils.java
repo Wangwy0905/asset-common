@@ -62,15 +62,15 @@ public class ResourceUtils {
 
     public static InputStream getInputStream(String filename) {
         try {
-            log.debug("从配置文件中读取[{}]文件", filename);
+            log.info("从配置文件中读取[{}]文件", filename);
             return new FileInputStream(getResourceConfigFile(filename));
         } catch (IOException e) {
-            log.debug("未能从配置文件中读取[{}]文件", filename);
+            log.info("未能从配置文件中读取[{}]文件", filename);
             try {
-                log.debug("从jar/resource中读取[{}]文件", filename);
+                log.info("从jar/resource中读取[{}]文件", filename);
                 return new FileInputStream(getRuntimeFile(filename));
             } catch (IOException e1) {
-                log.debug("未能从jar/resource中读取[{}]文件", filename);
+                log.info("未能从jar/resource中读取[{}]文件", filename);
                 log.warn("无法读取配置文件，请检查系统配置是否正确！", e1);
             }
         }
@@ -79,15 +79,15 @@ public class ResourceUtils {
 
     public static String getContent(String filename) {
         try {
-            log.debug("从配置文件中读取[{}]文件", filename);
+            log.info("从配置文件中读取[{}]文件", filename);
             return getConfigContent(getResourceConfigFile(filename));
         } catch (IOException e) {
-            log.debug("未能从配置文件中读取[{}]文件", filename);
+            log.info("未能从配置文件中读取[{}]文件", filename);
             try {
-                log.debug("从runtime directory中读取[{}]文件", filename);
+                log.info("从runtime directory中读取[{}]文件", filename);
                 return getConfigContent(getRuntimeFile(filename));
             } catch (IOException e1) {
-                log.debug("未能从runtime directory中读取[{}]文件", filename);
+                log.info("未能从runtime directory中读取[{}]文件", filename);
                 log.warn("无法读取配置文件，请检查系统配置是否正确！", e1);
             }
         }
@@ -123,7 +123,7 @@ public class ResourceUtils {
             return file;
         }
 
-        log.debug("从runtime的config目录下读取[{}]文件", filename);
-        return getRuntimeFile(CONF + file);
+        log.info("从runtime的config目录下读取[{}]文件", filename);
+        return getRuntimeFile(CONF + filename);
     }
 }

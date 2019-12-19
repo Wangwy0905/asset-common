@@ -116,18 +116,18 @@ pipeline {
   post {
       success {
         emailext (
-            subject: "SUCCESSFUL: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
-            body: """<p>SUCCESSFUL: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':</p>
-              <p>Check console output at &QUOT;<a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a>&QUOT;</p>""",
+            subject: "【Jenkins】编译通过: ${env.JOB_NAME} [${env.BUILD_NUMBER}]",
+            body: """<p>编译通过: ${env.JOB_NAME} [${env.BUILD_NUMBER}]:</p>
+              <p>点击链接查看编译日志： <a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a></p>""",
             recipientProviders: [[$class: 'DevelopersRecipientProvider']]
           )
       }
 
       failure {
         emailext (
-            subject: "FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
-            body: """<p>FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':</p>
-              <p>Check console output at &QUOT;<a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a>&QUOT;</p>""",
+            subject: "【Jenkins】编译失败: ${env.JOB_NAME} [${env.BUILD_NUMBER}]",
+            body: """<p>编译失败: ${env.JOB_NAME} [${env.BUILD_NUMBER}]:</p>
+              <p>点击链接查看编译日志： <a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a></p>""",
             recipientProviders: [[$class: 'DevelopersRecipientProvider']]
           )
       }
