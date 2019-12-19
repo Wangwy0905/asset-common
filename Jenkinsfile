@@ -2,8 +2,9 @@
 // feat-* 特性分支，开发新特性，发布<mainVersion>.*-SNAPSHOT包
 // dev 开发主分支，归并特性分支代码，Code Review，发布<mainVersion>.dev-SNAPSHOT包
 // stg 测试分支，集成测试，发布<mainVersion>.stg-SNAPSHOT包
-// rel 发布分支，发布<mainVersion>包
-
+// rel 发布分支，发布<mainVersion>.SNAPSHOT包
+// IMPORTANT!!! 我们不适用分支发布RELEASE版本的包，因为分支随时有可能重新执行，但RELEASE的包只能上传一次，如果要上传RELEASE版本的包
+//              需要使用tag并在jenkins上手动触发，tag格式：v<version>
 def revision = "" // 版本号
 pipeline {
   agent {
@@ -22,25 +23,30 @@ pipeline {
             }
 
             def branchName = env.getEnvironment().get('BRANCH_NAME')
+
             Set branchSet = ["dev", "stg", "rel", "master"]
-            if (!(branchName ==~ /feat-\d+/ || branchSet.contains(branchName) || branchName ==~ /MR-\d+-merge/)) {
+            if (!(branchName ==~ /feat-\d+/ || branchSet.contains(branchName) || branchName ==~ /MR-\d+-merge/ || branchName ==~ /v\d+\.\d+\.\d+.*/)) {
               throw new Exception("分支命名不规范，仅支持feat-*/dev/stg/rel/master")
             }
 
+            // Feature Branch
             if (branchName ==~ /feat-\d+/) {
-              revision = revision.replaceAll('-SNAPSHOT', '.' + env.getEnvironment().BRANCH_NAME.substring(5) + '-SNAPSHOT')
+              revision = revision.replaceAll('-SNAPSHOT', '.' + branchName.substring(5) + '-SNAPSHOT')
             }
 
+            // Merge Request
             if (branchName ==~ /MR-\d+-merge/) {
-              revision = revision.replaceAll('-SNAPSHOT', '.' + env.getEnvironment().BRANCH_NAME.toLowerCase().replaceAll('-merge', '').replaceAll(/-/, '.') + '-SNAPSHOT')
+              revision = revision.replaceAll('-SNAPSHOT', '.' + branchName.toLowerCase().replaceAll('-merge', '').replaceAll(/-/, '.') + '-SNAPSHOT')
             }
 
+            // SNAPSHOT分支
             if (branchName == 'dev' || branchName == 'stg') {
-              revision = revision.replaceAll('-SNAPSHOT', '.' + env.getEnvironment().BRANCH_NAME + '-SNAPSHOT')
+              revision = revision.replaceAll('-SNAPSHOT', '.' + branchName + '-SNAPSHOT')
             }
 
-            if (branchName == 'rel') {
-              revision = revision.replaceAll('-SNAPSHOT', '')
+            // TAG
+            if (branchName ==~ /v\d+\.\d+\.\d+.*/) {
+              revision = branchName.substring(1)
             }
           }
         }
@@ -64,7 +70,7 @@ pipeline {
       parallel {
         stage('FEATURE branch') {
           when {
-            branch pattern: "feat-\\d+", comparator: "REGEXP"
+            branch pattern: /feat-\d+/, comparator: "REGEXP"
           }
           steps {
             container('maven') {
@@ -87,6 +93,16 @@ pipeline {
         stage('RELEASE branch') {
           when {
             branch 'rel'
+          }
+          steps {
+            container('maven') {
+              sh "mvn -B -Drevision=${revision} deploy -DskipTests"
+            }
+          }
+        }
+        stage('TAG branch') {
+          when {
+            branch pattern: /v\d+\.\d+\.\d+.*/, comparator: "REGEXP"
           }
           steps {
             container('maven') {
