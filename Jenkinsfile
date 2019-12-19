@@ -2,7 +2,7 @@
 // feat-* 特性分支，开发新特性，发布<mainVersion>.*-SNAPSHOT包
 // dev 开发主分支，归并特性分支代码，Code Review，发布<mainVersion>.dev-SNAPSHOT包
 // stg 测试分支，集成测试，发布<mainVersion>.stg-SNAPSHOT包
-// rel 发布分支，发布<mainVersion>包
+// rel 发布分支，发布<mainVersion>包，若rel上有tag，则根据tag名称进行打包
 
 def revision = "" // 版本号
 pipeline {
