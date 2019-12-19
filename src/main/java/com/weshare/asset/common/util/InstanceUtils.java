@@ -15,7 +15,11 @@ import java.util.Enumeration;
 public class InstanceUtils {
     @Nullable
     public static String getLocalHost() {
-        return getLocalHostLANAddress().getHostAddress();
+        InetAddress inetAddress = getLocalHostLANAddress();
+        if (inetAddress == null) {
+            return null;
+        }
+        return inetAddress.getHostAddress();
     }
 
     @Nullable
