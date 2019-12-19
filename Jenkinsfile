@@ -31,6 +31,10 @@ pipeline {
               revision = revision.replaceAll('-SNAPSHOT', '.' + env.getEnvironment().BRANCH_NAME.substring(5) + '-SNAPSHOT')
             }
 
+            if (branchName ==~ /MR-\d+-merge/) {
+              revision = revision.replaceAll('-SNAPSHOT', '.' + env.getEnvironment().BRANCH_NAME.toLowerCase().replaceAll('-merge', '').replaceAll(/-/, '.') + '-SNAPSHOT')
+            }
+
             if (branchName == 'dev' || branchName == 'stg') {
               revision = revision.replaceAll('-SNAPSHOT', '.' + env.getEnvironment().BRANCH_NAME + '-SNAPSHOT')
             }
