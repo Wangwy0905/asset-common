@@ -124,6 +124,6 @@ public class ResourceUtils {
         }
 
         log.info("从runtime的config目录下读取[{}]文件", filename);
-        return getRuntimeFile(CONF + file);
+        return getRuntimeFile(CONF + filename);
     }
 }
