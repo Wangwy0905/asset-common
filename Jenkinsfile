@@ -2,8 +2,9 @@
 // feat-* 特性分支，开发新特性，发布<mainVersion>.*-SNAPSHOT包
 // dev 开发主分支，归并特性分支代码，Code Review，发布<mainVersion>.dev-SNAPSHOT包
 // stg 测试分支，集成测试，发布<mainVersion>.stg-SNAPSHOT包
-// rel 发布分支，发布<mainVersion>包，若rel上有tag，则根据tag名称进行打包
-
+// rel 发布分支，发布<mainVersion>.SNAPSHOT包
+// IMPORTANT!!! 我们不适用分支发布RELEASE版本的包，因为分支随时有可能重新执行，但RELEASE的包只能上传一次，如果要上传RELEASE版本的包
+//              需要使用tag并在jenkins上手动触发，tag格式：release-<version>
 def revision = "" // 版本号
 pipeline {
   agent {
@@ -22,6 +23,7 @@ pipeline {
             }
 
             def branchName = env.getEnvironment().get('BRANCH_NAME')
+            println branchName
             Set branchSet = ["dev", "stg", "rel", "master"]
             if (!(branchName ==~ /feat-\d+/ || branchSet.contains(branchName) || branchName ==~ /MR-\d+-merge/)) {
               throw new Exception("分支命名不规范，仅支持feat-*/dev/stg/rel/master")
@@ -37,10 +39,6 @@ pipeline {
 
             if (branchName == 'dev' || branchName == 'stg') {
               revision = revision.replaceAll('-SNAPSHOT', '.' + env.getEnvironment().BRANCH_NAME + '-SNAPSHOT')
-            }
-
-            if (branchName == 'rel') {
-              revision = revision.replaceAll('-SNAPSHOT', '')
             }
           }
         }
