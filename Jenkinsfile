@@ -36,7 +36,7 @@ pipeline {
 
             // Merge Request
             if (branchName ==~ /MR-\d+-merge/) {
-              revision = revision.replaceAll('-SNAPSHOT', '.' + branchName.replaceAll('-merge', '').replaceAll(/-/, '.') + '-SNAPSHOT')
+              revision = revision.replaceAll('-SNAPSHOT', '.' + branchName.toLowerCase().replaceAll('-merge', '').replaceAll(/-/, '.') + '-SNAPSHOT')
             }
 
             // SNAPSHOT分支
