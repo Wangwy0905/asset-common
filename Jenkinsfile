@@ -23,12 +23,16 @@ pipeline {
 
             def branchName = env.getEnvironment().get('BRANCH_NAME')
             Set branchSet = ["dev", "stg", "rel", "master"]
-            if (!(branchName ==~ /feat-\d+/ || branchSet.contains(branchName))) {
+            if (!(branchName ==~ /feat-\d+/ || branchSet.contains(branchName) || branchName ==~ /MR-\d+-merge/)) {
               throw new Exception("分支命名不规范，仅支持feat-*/dev/stg/rel/master")
             }
 
             if (branchName ==~ /feat-\d+/) {
               revision = revision.replaceAll('-SNAPSHOT', '.' + env.getEnvironment().BRANCH_NAME.substring(5) + '-SNAPSHOT')
+            }
+
+            if (branchName ==~ /MR-\d+-merge/) {
+              revision = revision.replaceAll('-SNAPSHOT', '.' + env.getEnvironment().BRANCH_NAME.toLowerCase().replaceAll('-merge', '').replaceAll(/-/, '.') + '-SNAPSHOT')
             }
 
             if (branchName == 'dev' || branchName == 'stg') {
