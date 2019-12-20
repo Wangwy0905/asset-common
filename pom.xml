@@ -9,7 +9,7 @@
         <revision>3.0.0-SNAPSHOT</revision>
     </properties>
 
-    <groupId>com.weshare</groupId>
+    <groupId>com.weshare.asset</groupId>
     <artifactId>asset-common</artifactId>
     <version>${revision}</version>
     <packaging>jar</packaging>
