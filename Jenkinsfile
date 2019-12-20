@@ -26,7 +26,7 @@ pipeline {
 
             Set branchSet = ["dev", "stg", "rel", "master"]
             if (!(branchName ==~ /feat-\d+/ || branchSet.contains(branchName) || branchName ==~ /MR-\d+-merge/ || branchName ==~ /v\d+\.\d+\.\d+.*/)) {
-              throw new Exception("分支命名不规范，仅支持feat-*/dev/stg/rel/master")
+              throw new Exception("分支【" + branchName + "】命名不规范，仅支持feat-*/dev/stg/rel/master")
             }
 
             // Feature Branch
