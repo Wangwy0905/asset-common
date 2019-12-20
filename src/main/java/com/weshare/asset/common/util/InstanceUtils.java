@@ -1,5 +1,7 @@
 package com.weshare.asset.common.util;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.lang.Nullable;
 
 import java.net.InetAddress;
@@ -13,9 +15,15 @@ import java.util.Enumeration;
  * @Version: 1.0
  */
 public class InstanceUtils {
+    private static final Logger logger = LoggerFactory.getLogger(InstanceUtils.class);
+
     @Nullable
     public static String getLocalHost() {
-        return getLocalHostLANAddress().getHostAddress();
+        InetAddress inetAddress = getLocalHostLANAddress();
+        if (inetAddress == null) {
+            return null;
+        }
+        return inetAddress.getHostAddress();
     }
 
     @Nullable
@@ -49,7 +57,7 @@ public class InstanceUtils {
             }
             return jdkSuppliedAddress;
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.warn("获取本机IP错误", e);
             return null;
         }
     }

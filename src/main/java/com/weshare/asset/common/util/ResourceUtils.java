@@ -16,6 +16,8 @@ import java.util.List;
 
 @Slf4j
 public class ResourceUtils {
+    private static final String CONF = "config/";
+
     /**
      * 读取文件中的内容，并反序列化成指定对象
      * @param filename
@@ -60,15 +62,15 @@ public class ResourceUtils {
 
     public static InputStream getInputStream(String filename) {
         try {
-            log.debug("从配置文件中读取[{}]文件", filename);
-            return new FileInputStream(getConfigFile(filename));
+            log.info("从配置文件中读取[{}]文件", filename);
+            return new FileInputStream(getResourceConfigFile(filename));
         } catch (IOException e) {
-            log.debug("未能从配置文件中读取[{}]文件", filename);
+            log.info("未能从配置文件中读取[{}]文件", filename);
             try {
-                log.debug("从jar/resource中读取[{}]文件", filename);
-                return new FileInputStream(getDefaultFile(filename));
+                log.info("从runtime directory中读取[{}]文件", filename);
+                return new FileInputStream(getRuntimeFile(filename));
             } catch (IOException e1) {
-                log.debug("未能从jar/resource中读取[{}]文件", filename);
+                log.info("未能从runtime directory中读取[{}]文件", filename);
                 log.warn("无法读取配置文件，请检查系统配置是否正确！", e1);
             }
         }
@@ -77,15 +79,15 @@ public class ResourceUtils {
 
     public static String getContent(String filename) {
         try {
-            log.debug("从配置文件中读取[{}]文件", filename);
-            return getConfigContent(getConfigFile(filename));
+            log.info("从配置文件中读取[{}]文件", filename);
+            return getConfigContent(getResourceConfigFile(filename));
         } catch (IOException e) {
-            log.debug("未能从配置文件中读取[{}]文件", filename);
+            log.info("未能从配置文件中读取[{}]文件", filename);
             try {
-                log.debug("从jar/resource中读取[{}]文件", filename);
-                return getConfigContent(getDefaultFile(filename));
+                log.info("从runtime directory中读取[{}]文件", filename);
+                return getConfigContent(getRuntimeFile(filename));
             } catch (IOException e1) {
-                log.debug("未能从jar/resource中读取[{}]文件", filename);
+                log.info("未能从runtime directory中读取[{}]文件", filename);
                 log.warn("无法读取配置文件，请检查系统配置是否正确！", e1);
             }
         }
@@ -109,13 +111,21 @@ public class ResourceUtils {
         }
     }
 
-    private static File getConfigFile(String filename) throws IOException {
+    private static File getResourceConfigFile(String filename) throws IOException {
         ResourceLoader resourceLoader = new DefaultResourceLoader();
-        return resourceLoader.getResource("file:./config/" + filename).getFile();
+        return resourceLoader.getResource("file:./" + CONF + filename).getFile();
     }
 
-    private static File getDefaultFile(String filename) throws IOException {
-        ResourceLoader resourceLoader = new DefaultResourceLoader();
-        return resourceLoader.getResource(filename).getFile();
+    private static File getRuntimeFile(String filename) throws IOException {
+        try {
+            ResourceLoader resourceLoader = new DefaultResourceLoader();
+            return resourceLoader.getResource(filename).getFile();
+        } catch (IOException e) {
+            if (!filename.startsWith(CONF)) {
+                log.info("从runtime config目录下读取[{}]文件", filename);
+                return getRuntimeFile(CONF + filename);
+            }
+            throw e;
+        }
     }
 }
