@@ -59,10 +59,62 @@ pipeline {
         }
       }
     }
-    stage('Test and Sonar Scan') {
-      steps {
-        container('maven') {
-          sh "mvn -B -Drevision=${revision} verify sonar:sonar"
+    stage('Test') {
+      parallel {
+        stage('BRANCH SONAR rules') {
+          when {
+            anyOf {
+              branch pattern: /feat-\d+/, comparator: "REGEXP";
+              branch 'dev';
+              branch 'master'
+            }
+          }
+          steps {
+            container('maven') {
+              sh "mvn -B -Drevision=${revision} verify sonar:sonar"
+            }
+          }
+        }
+        stage('BRANCH TEST rules') {
+          when {
+            anyOf {
+              branch 'stg';
+              // branch 'uat';
+              branch 'rel';
+              branch pattern: /v\d+\.\d+\.\d+.*/, comparator: "REGEXP";
+            }
+          }
+          steps {
+            container('maven') {
+              sh "mvn -B -Drevision=${revision} test"
+            }
+          }
+        }
+        stage('MERGE SONAR rules') {
+          when {
+            allOf {
+              branch pattern:  /MR-\d+-merge/, comparator: "REGEXP";
+              environment name: 'CHANGE_TARGET', value: 'dev'
+            }
+          }
+          steps {
+            container('maven') {
+              sh "mvn -B -Drevision=${revision} verify sonar:sonar"
+            }
+          }
+        }
+        stage('MERGE TEST rules') {
+          when {
+            allOf {
+              branch pattern:  /MR-\d+-merge/, comparator: "REGEXP";
+              not { environment name: 'CHANGE_TARGET', value: 'dev' }
+            }
+          }
+          steps {
+            container('maven') {
+              sh "mvn -B -Drevision=${revision} test"
+            }
+          }
         }
       }
     }
