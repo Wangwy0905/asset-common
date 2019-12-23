@@ -64,7 +64,6 @@ pipeline {
         stage('BRANCH SONAR rules') {
           when {
             anyOf {
-              branch pattern: /feat-\d+/, comparator: "REGEXP";
               branch 'dev';
               branch 'master'
             }
@@ -78,6 +77,7 @@ pipeline {
         stage('BRANCH TEST rules') {
           when {
             anyOf {
+              branch pattern: /feat-\d+/, comparator: "REGEXP";
               branch 'stg';
               // branch 'uat';
               branch 'rel';
