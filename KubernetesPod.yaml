@@ -54,10 +54,13 @@ spec:
     - name: git-config
       mountPath: /home/jenkins/.gitconfig
   volumes:
+  # - name: workspace-volume
+  #   hostPath:
+  #     path: /share/build/agent
+  #     type: DirectoryOrCreate
   - name: workspace-volume
-    hostPath:
-      path: /share/build/agent
-      type: DirectoryOrCreate
+    emptyDir:
+      medium: "Memory"
   - name: git-config
     hostPath:
       path: /share/build/git/.gitconfig
